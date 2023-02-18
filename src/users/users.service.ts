@@ -26,9 +26,18 @@ export class UsersService {
     return this.userModel.findOne({ username }).exec();
   }
 
+  async updateRefrestoken(
+    id: string,
+    updateUserDto
+  ): Promise<UserDocument> {
+    return this.userModel
+      .findByIdAndUpdate(id, updateUserDto.refreshToken, { new: true })
+      .exec();
+  }
+
   async update(
     id: string,
-    updateUserDto: UpdateUserDto,
+    updateUserDto : UpdateUserDto,
   ): Promise<UserDocument> {
     return this.userModel
       .findByIdAndUpdate(id, updateUserDto, { new: true })

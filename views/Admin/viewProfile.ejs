@@ -82,41 +82,9 @@
                             <h4>Name : <label id="name"><%= employee.name %></label></h4>
                             <h4>Email : <label id="type"><%= employee.email %></label></h4>
                             <h4>Date of Birth : <label
-                                        id="dob"><%= moment(employee.dateOfBirth).format('MMMM Do YYYY') %></label></h4>
-                            <h4>Department : <label id="department"><% if(!employee.department){%>
-                                        <%="N/A"%>
-                                    <%
-                                    }
-                                    else{%>
-                            <%=employee.department%>
-                                    <%}%>
+                                        id="dob"><%= employee.dateOfBirth %></label></h4>
+            
 
-                                    </label></h4>
-                            <h4>Designation : <label id="designation"><% if(!employee.designation){%>
-                                    <%="N/A"%>
-                                    <%
-                                    }
-                                    else{%>
-                                    <%=employee.designation%>
-                                    <%}%></label></h4>
-
-                            <% if(employee.Skills.length > 0){ %>
-
-                            <h4>Skills:</h4>
-                            <div style="height: 250px; overflow: auto;">
-                                <ul class="list-group" id="skills">
-                                    <%
-                                    employee.Skills.forEach(function(val){
-                                    if(val != ""){ %>
-                                    <li class="list-group-item"><%= val %></li>
-
-                                    <% }
-                                    }) %>
-                                </ul>
-                            </div>
-                            <% }else{ %>
-                            <h4>Skills : <label id="skills">N/A</label></h4>
-                            <% } %>
                         </form>
                     </div>
                 </div>
@@ -156,7 +124,6 @@
                 </div>
                 <div class="modal-footer">
 
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="reset" class="btn btn-default" data-dismiss="modal">No</button>
                     <button type="submit" class="btn btn-default">Yes</button>
                 </div>
@@ -200,7 +167,6 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="reset" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-default">View</button>
                 </div>

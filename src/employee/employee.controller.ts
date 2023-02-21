@@ -5,7 +5,7 @@ import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import RoleGuard from 'src/users/role/roles.guards';
 import Role from 'src/users/role/roles.enum';
 
-@UseGuards(RoleGuard(Role.Admin))
+@UseGuards(RoleGuard(Role.Employee))
 @Controller('employee')
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}

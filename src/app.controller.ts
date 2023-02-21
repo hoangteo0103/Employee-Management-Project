@@ -10,6 +10,12 @@ export class AppController {
   {
     res.redirect('auth/login');
   }
+
+
+  @Get('logout')
+  function(@Res() res )  {
+    res.redirect('auth/logout');
+  }
   
   
 }

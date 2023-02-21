@@ -40,7 +40,8 @@ export class AuthController {
     const jwt_token  = await this.authService.signIn(data);
     res.cookie('access_token' , jwt_token.accessToken);
     res.cookie('refresh_token' , jwt_token.refreshToken);
-    res.redirect('/admin'); 
+    if(data.username == "admin") res.redirect('/admin');
+    else res.redirect('/employee');
   }
   @UseGuards(AccessTokenGuard)
   @Get('logout')

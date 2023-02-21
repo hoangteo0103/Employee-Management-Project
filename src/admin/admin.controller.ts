@@ -24,9 +24,10 @@ export class AdminController {
   async displayAll()
   {
     const users = await this.adminService.findAll();
-    console.log(users);
     return {title : "View all employee" , userName : "HEHE", users : users};
   }
+
+  
 
   @Get('add-employee')
   @Render('Admin/addEmployee')

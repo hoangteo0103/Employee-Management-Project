@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Render, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Render,Req,  UseGuards } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
@@ -15,6 +15,13 @@ export class EmployeeController {
   displayHome()
   {
     return {title : "Employee" , userName : "hello"};
+  }
+
+  @Get('view-profile')
+  @Render('Employee/viewProfile')
+  viewProfileEmployee(@Req() req)
+  {
+    return {title : "Profile" , employee : req.user , userName : req.user.name};
   }
 
   @Post()

@@ -1,9 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete ,Res , Render } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete ,Res , Render, UseGuards } from '@nestjs/common';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import Role from 'src/users/role/roles.enum';
+import RoleGuard from 'src/users/role/roles.guards';
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 
+
+@UseGuards(RoleGuard(Role.Admin))
 @Controller('admin')
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}

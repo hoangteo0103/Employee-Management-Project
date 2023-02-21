@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { UsersService } from 'src/users/users.service';
 import { constantsJWT } from '../jwt-secret';
 
 type JwtPayload = {
@@ -17,14 +18,16 @@ const extactFromCookie = request => {
 
 @Injectable()
 export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
-  constructor() {
+  constructor(
+    private userService : UsersService
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([extactFromCookie]),
       secretOrKey:constantsJWT[0],
     });
-  }
+  };
 
   validate(payload: JwtPayload) {
-    return payload;
+    return this.userService.findById(payload.sub);
   }
 }

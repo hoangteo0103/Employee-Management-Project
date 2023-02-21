@@ -41,8 +41,7 @@ export class AuthController {
     res.cookie('access_token' , jwt_token.accessToken);
     res.cookie('refresh_token' , jwt_token.refreshToken);
 
-    res.redirect('/admin');
-    
+    res.redirect('/employee'); 
   }
   @UseGuards(AccessTokenGuard)
   @Get('logout')

@@ -1,15 +1,36 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
+import * as argon2 from 'argon2';
 import { UsersService } from 'src/users/users.service';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AdminService {
   constructor(
     private usersService: UsersService,
+    private jwtService : JwtService
   ) {}
-  create(createAdminDto: CreateAdminDto) {
-    return 'This action adds a new admin';
+  async create(createUserDto: CreateUserDto): Promise<any> {
+      // Check if user exists
+      const userExists = await this.usersService.findByUsername(
+        createUserDto.username,
+      );
+      if (userExists) {
+        throw new BadRequestException('User already exists');
+      }
+  
+      // Hash password
+      const hash = await this.hashData(createUserDto.password);
+      const newUser = await this.usersService.create({
+        ...createUserDto,
+        password: hash,
+      });
+  }
+
+  hashData(data: string) {
+    return argon2.hash(data);
   }
 
   async findAll() {

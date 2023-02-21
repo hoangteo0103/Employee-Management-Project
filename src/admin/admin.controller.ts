@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete , Render } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete ,Res , Render } from '@nestjs/common';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
@@ -23,10 +24,27 @@ export class AdminController {
     return {title : "View all employee" , userName : "HEHE", users : users};
   }
 
+  @Get('add-employee')
+  @Render('Admin/addEmployee')
+  function (){
+    return {
+      title : "Add Employee" ,
+      messages : "NONE" ,
+      hasErrors : false ,
+      userName : "hello"
+    };
+  }
+
+  @Post('add-employee')
+  async addEmployee(@Body() createUserDto : CreateUserDto , @Res() res) {
+    createUserDto.type = "employee";
+    await this.adminService.create(createUserDto);
+    res.redirect('view-all-employees');
+  }
+
 
   @Post()
   create(@Body() createAdminDto: CreateAdminDto) {
-    return this.adminService.create(createAdminDto);
   }
 
 

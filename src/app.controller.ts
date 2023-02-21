@@ -1,28 +1,15 @@
-import { Controller, Get , Render } from '@nestjs/common';
+import { Controller, Get , Render, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('login')
-  @Render('login')
-  hello()
+  @Get()
+  loginMenu(@Res() res)
   {
-    return {message : "Hello" , title : "Hello" , hasErrors : false};
+    res.redirect('auth/login');
   }
-
-  @Get('admin')
-  @Render('Admin/adminHome')
-  admin()
-  {
-    return {message : "HELLO" , title : "Admin" , userName : "Hoang"};
-  }
-
-  @Get('employee')
-  @Render('Employee/employeeHome')
-  he()
-  {
-    return {message : "HELLO" , title : "Admin" , userName : "Hoang"};
-  }
+  
+  
 }

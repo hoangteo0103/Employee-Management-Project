@@ -1,1 +1,1 @@
-export const constantsJWT = ["NONE" , "HELLO"];
+export const constantsJWT = ["super secret" , "hello world not a syntax"];

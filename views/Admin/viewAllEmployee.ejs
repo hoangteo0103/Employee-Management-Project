@@ -29,7 +29,7 @@
                             class="glyphicon glyphicon-th-large" aria-hidden="true"></span></button>
             </li>
             <li class="navbar-brand">
-                <form action="/logout" method="get">
+                <form action="/auth/logout" method="get">
                     <button id="logout" type="submit" style="margin-top: -3px;" class="btn btn-default"><i
                                 class="fa fa-user" aria-hidden="true"></i> Logout
                     </button>
@@ -99,7 +99,7 @@
                             </tr>
                             </tfoot>
                             <tbody>
-                            <% users.forEach(function(item){ %>
+                            <% for(const item of users) { %>
 
                             <tr>
                                 <td><%= item.name %></td>
@@ -163,7 +163,7 @@
                                     </table>
                                 </td>
                             </tr>
-                            <% }) %>
+                            <% } %>
 
                             </tbody>
                         </table>
@@ -252,7 +252,6 @@
                 </div>
                 <div class="modal-footer">
 
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                     <button type="submit" class="btn btn-default">Yes</button>
                 </div>
@@ -273,7 +272,6 @@
                     <p>Are you sure you want to mark attendance.</p>
                 </div>
                 <div class="modal-footer">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="reset" class="btn btn-default" data-dismiss="modal">No</button>
                     <button type="submit" class="btn btn-default">Yes</button>
                 </div>
@@ -317,7 +315,6 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="reset" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-default">View</button>
                 </div>

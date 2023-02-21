@@ -46,7 +46,7 @@ export class AuthService {
   }
 
 	async logout(userId: string) {
-    return this.usersService.updateRefrestoken(userId, { refreshToken: null });
+    return this.usersService.updateRefreshtoken(userId, { refreshToken: null });
   }
 
   hashData(data: string) {
@@ -56,7 +56,7 @@ export class AuthService {
   async updateRefreshToken(userId: string, refreshToken: string) {
     const hashedRefreshToken = await this.hashData(refreshToken);
 
-    await this.usersService.updateRefrestoken(userId, {
+    await this.usersService.updateRefreshtoken(userId, {
       refreshToken: hashedRefreshToken,
     });
   }

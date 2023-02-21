@@ -26,7 +26,7 @@ export class UsersService {
     return this.userModel.findOne({ username }).exec();
   }
 
-  async updateRefrestoken(
+  async updateRefreshtoken(
     id: string,
     updateUserDto
   ): Promise<UserDocument> {

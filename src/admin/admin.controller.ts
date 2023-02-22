@@ -78,7 +78,6 @@ export class AdminController {
 
   @Post('add-employee')
   async addEmployee(@Body() createUserDto : CreateUserDto , @Res() res) {
-    createUserDto.type = "employee";
     await this.adminService.create(createUserDto);
     res.redirect('view-all-employees');
   }

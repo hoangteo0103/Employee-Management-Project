@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
+import { CreateAttendanceDto } from 'src/attendance/dto/create-attendance.dto';
 
 @Injectable()
 export class UsersService {
@@ -47,4 +48,5 @@ export class UsersService {
   async remove(id: string): Promise<UserDocument> {
     return this.userModel.findByIdAndDelete(id).exec();
   }
+
 }

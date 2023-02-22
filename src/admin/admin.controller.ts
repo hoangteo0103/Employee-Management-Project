@@ -6,6 +6,7 @@ import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { GenerateArrayFilter, ArrayFilter } from '@kartikyathakur/nestjs-query-filter';
+import { UsersService } from 'src/users/users.service';
 
 @UseGuards(RoleGuard(Role.Admin))
 @Controller('admin')
@@ -24,6 +25,9 @@ export class AdminController {
   viewProfileAdmin(@Req() req) {
     return {title : "Profile" , employee : req.user , userName : req.user.name};
   };
+
+
+  // View Employeee
 
   @Get('view-employees')
   async findAll(@GenerateArrayFilter() arrayFilter: ArrayFilter) {
@@ -53,6 +57,9 @@ export class AdminController {
     };
   }
 
+
+  // Add and edit employee
+
   @Post('add-employee')
   async addEmployee(@Body() createUserDto : CreateUserDto , @Res() res) {
     createUserDto.type = "employee";
@@ -60,6 +67,20 @@ export class AdminController {
     res.redirect('view-all-employees');
   }
 
+  // Attendance 
+
+  @Get('view-attendance-current') 
+  async displayAttendanceCurrent(@Req() req)
+  {
+
+  }
+
+  @Post('mark-attendance')
+  async markEmployeeAttendance(@Req() req , @Res() res) 
+  {
+    await this.adminService.markAttendance(req.user);
+    res.redirect('view-attendance-current');
+  }
 
   @Post()
   create(@Body() createAdminDto: CreateAdminDto) {

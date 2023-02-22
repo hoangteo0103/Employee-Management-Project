@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateAttendanceDto } from './dto/create-attendance.dto';
@@ -9,8 +9,18 @@ import { AttendanceDocument } from './schemas/attendance.schema';
 @Injectable()
 export class AttendanceService {
   constructor(@InjectModel(Attendance.name) private attendanceModel : Model<AttendanceDocument> ) {};
-  create(createAttendanceDto: CreateAttendanceDto) {
-    return 'This action adds a new attendance';
+  async create(createAttendanceDto: CreateAttendanceDto) : Promise<AttendanceDocument>{
+    const date = new Date();
+    if(this.attendanceModel.find({employeeID : createAttendanceDto.employeeID ,
+       year : date.getFullYear() , 
+       month : date.getMonth() , 
+       date : date.getDate()})
+    ) {
+      throw new BadRequestException("Already mark attendance");
+    };
+    const createdAttendance = new this.attendanceModel(createAttendanceDto);
+
+    return createdAttendance.save();
   }
 
   findAll() {

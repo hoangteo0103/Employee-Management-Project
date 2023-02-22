@@ -7,11 +7,12 @@ import { AccessTokenStrategy } from './strategies/accToken.strategy';
 import { RefreshTokenStrategy } from './strategies/refToken.strategy';
 import { constantsJWT } from './jwt-secret';
 import { UsersModule } from 'src/users/users.module';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [JwtModule.register({
     secret: constantsJWT[0],
-      signOptions: { expiresIn: '60s' }}) , UsersModule],
+      signOptions: { expiresIn: '60s' }}) , UsersModule , MailModule],
   controllers: [AuthController],
   providers: [AuthService, AccessTokenStrategy, RefreshTokenStrategy],
 })

@@ -6,14 +6,20 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthDto } from './dto/auth.dto';
 import { constantsJWT } from './jwt-secret';
 import { ForbiddenException } from '@nestjs/common';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private mailService : MailService
   ) {}
   async signUp(createUserDto: CreateUserDto): Promise<any> {
+
+    this.mailService.sendUserConfirmation("buinguyenhoang0103@gmail.com" , "cucu");
+    return ;
+
     // Check if user exists
     const userExists = await this.usersService.findByUsername(
       createUserDto.username,

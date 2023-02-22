@@ -7,9 +7,10 @@ import { AuthModule } from './auth/auth.module';
 import { EmployeeModule } from './employee/employee.module';
 import { AdminModule } from './admin/admin.module';
 import { AttendanceModule } from './attendance/attendance.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [UsersModule , MongooseModule.forRoot('mongodb://127.0.0.1:27017'), AuthModule, EmployeeModule, AdminModule, AttendanceModule],
+  imports: [UsersModule , MongooseModule.forRoot('mongodb://127.0.0.1:27017'),ConfigModule.forRoot({isGlobal:true}), AuthModule, EmployeeModule, AdminModule, AttendanceModule],
   controllers: [AppController],
   providers: [AppService],
 })

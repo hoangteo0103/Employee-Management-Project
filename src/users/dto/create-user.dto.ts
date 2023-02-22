@@ -6,4 +6,7 @@ export class CreateUserDto {
     contactNumber : string;
     dateOfBirth : string ;
     refreshToken: string;
+    Skills : string[] ;
+    designation : string ; 
+    department : string ;
   }

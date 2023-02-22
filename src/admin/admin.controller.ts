@@ -9,6 +9,7 @@ import { GenerateArrayFilter, ArrayFilter } from '@kartikyathakur/nestjs-query-f
 import { UsersService } from 'src/users/users.service';
 import { AttendanceService } from 'src/attendance/attendance.service';
 import mongoose from 'mongoose';
+import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 
 @UseGuards(RoleGuard(Role.Admin))
 @Controller('admin')
@@ -120,6 +121,32 @@ export class AdminController {
     this.attendanceService.create({employeeID : req.user._id , year : new Date().getFullYear() , month : new Date().getMonth() + 1 , date : new Date().getDate() , present : true});
     res.redirect('view-attendance-current');
   }
+
+
+  // Edit employee
+
+  @Get('edit-employee/:id')
+  @Render('Admin/editEmployee')
+  async editEmployeeView(@Req() req) {
+    const employeeID = req.params.id ; 
+    const user = await this.userService.findById(employeeID) ; 
+    return {
+      title : "Edit Employee" ,
+      employee : user, 
+      message : "" ,
+      userName : req.user.name
+    }
+  }
+
+  @Post('edit-employee/:id')
+  async editEmployee(@Body() updateUserDto : UpdateUserDto , @Req() req , @Res() res)
+  {
+    const employeeID = req.params.id ; 
+    await this.userService.update(employeeID , updateUserDto) ; 
+    res.redirect('/admin');
+  }
+
+
 
   @Post()
   create(@Body() createAdminDto: CreateAdminDto) {

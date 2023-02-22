@@ -11,9 +11,9 @@ export class AttendanceService {
   constructor(@InjectModel(Attendance.name) private attendanceModel : Model<AttendanceDocument> ) {};
   async create(createAttendanceDto: CreateAttendanceDto) : Promise<AttendanceDocument>{
     const date = new Date();
-    this.attendanceModel.find({employeeID : createAttendanceDto.employeeID ,
+    await this.attendanceModel.find({employeeID : createAttendanceDto.employeeID ,
        year : date.getFullYear() , 
-       month : date.getMonth() , 
+       month : date.getMonth() + 1 , 
        date : date.getDate()})
     .exec(function(err , docs) {
       if(docs.length > 0)

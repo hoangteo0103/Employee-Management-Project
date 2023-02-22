@@ -33,6 +33,16 @@ export class User {
   @Prop({require : true  , default : Role.Employee})
   role : Role
 
+  @Prop({require : false})
+  department : String ; 
+
+  @Prop({require : false})
+  Skills : [String] ; 
+
+
+  @Prop({require : false }) 
+  designation : String ; 
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

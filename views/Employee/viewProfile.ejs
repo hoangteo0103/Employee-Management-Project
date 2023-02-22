@@ -78,6 +78,30 @@
                             <h4>Email : <label id="type"><%= employee.email %></label></h4>
                             <h4>Date of Birth : <label
                                         id="dob"><%= employee.dateOfBirth %></label></h4>
+                            <h4>Department : <label id="department"><%= employee.department %></label></h4>
+                            <h4>Designation : <label id="designation"><%= employee.designation %></label></h4>
+                            <h4>Projects : <label id="projects">
+                                    <button type="submit" class="form-control">View Projects</button>
+                                </label></h4>
+
+                            <% if(employee.Skills.length > 0){ %>
+
+                            <h4>Skills:</h4>
+                            <div style="height: 250px; overflow: auto;">
+                                <ul class="list-group" id="skills">
+                                    <%
+                                    employee.Skills.forEach(function(val){
+                                    if(val != ""){ %>
+                                    <li class="list-group-item"><%= val %></li>
+
+                                    <% }
+                                    }) %>
+
+                                </ul>
+                            </div>
+                            <% }else{ %>
+                            <h4>Skills : <label id="skills">N/A</label></h4>
+                            <% } %>
                         </form>
                     </div>
                 </div>

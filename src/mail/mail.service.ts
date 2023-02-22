@@ -6,17 +6,17 @@ import { User } from 'src/users/schemas/user.schema';
 export class MailService {
   constructor(private mailerService: MailerService) {}
 
-  async sendUserConfirmation(email : string, token: string) {
-    const url = `example.com/auth/confirm?token=${token}`;
+  async sendUserConfirmation(email : string, name : string ,  username : string , password : string) {
 
     await this.mailerService.sendMail({
       to: email,
       // from: '"Support Team" <support@example.com>', // override default from
-      subject: 'Welcome to Nice App! Confirm your Email',
+      subject: 'Welcome to HR MANAGEMENT SYSTEM! Confirm your Email',
       template: './confirmation', // `.hbs` extension is appended automatically
       context: { // ✏️ filling curly brackets with content
-        name: "TEST",
-        url,
+        name : name , 
+        username: username,
+        password : password,
       },
     });
   }

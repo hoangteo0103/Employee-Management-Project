@@ -31,8 +31,10 @@ export class AuthController {
 
 
   @Post('signup')
-  signup(@Body() createUserDto: CreateUserDto) {
-    return this.authService.signUp(createUserDto);
+  async signup(@Body() createUserDto : CreateUserDto , @Res() res) {
+    console.log(createUserDto.email);
+    await this.authService.signUp(createUserDto);
+    res.redirect('login');
   }
 
   @Post('signin')

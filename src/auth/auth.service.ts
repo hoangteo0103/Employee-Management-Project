@@ -15,27 +15,43 @@ export class AuthService {
     private jwtService: JwtService,
     private mailService : MailService
   ) {}
-  async signUp(createUserDto: CreateUserDto): Promise<any> {
+  
+  generatePassword() {
+    var length = 8,
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+  } 
 
-    this.mailService.sendUserConfirmation("buinguyenhoang0103@gmail.com" , "cucu");
-    return ;
+  removeAccents(str) {
+    return str.normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .replace(/đ/g, 'd').replace(/Đ/g, 'D');
+  }
 
+  async signUp(createUserDto : CreateUserDto): Promise<any> {
     // Check if user exists
-    const userExists = await this.usersService.findByUsername(
-      createUserDto.username,
-    );
+    createUserDto.username = this.removeAccents(createUserDto.name).toLocaleLowerCase().replace(/\s/g, '') ;
+    const userExists = await this.usersService.findByEmail(
+        createUserDto.email
+      );
     if (userExists) {
       throw new BadRequestException('User already exists');
     }
 
     // Hash password
-    const hash = await this.hashData(createUserDto.password);
+    const password = this.generatePassword();
+    const hash = await this.hashData(password);
     const newUser = await this.usersService.create({
       ...createUserDto,
-      password: hash,
+      password: hash
     });
     const tokens = await this.getTokens(newUser._id, newUser.username);
     await this.updateRefreshToken(newUser._id, tokens.refreshToken);
+    await this.mailService.sendUserConfirmation(createUserDto.email ,createUserDto.name, createUserDto.username , password);
     return tokens;
   }
 

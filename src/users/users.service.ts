@@ -22,7 +22,9 @@ export class UsersService {
   async findById(id: string): Promise<UserDocument> {
     return this.userModel.findById(id);
   }
-
+  async findByEmail(email: string): Promise<UserDocument> {
+    return this.userModel.findOne({ email }).exec();
+  }
   async findByUsername(username: string): Promise<UserDocument> {
     return this.userModel.findOne({ username }).exec();
   }

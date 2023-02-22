@@ -55,8 +55,4 @@ export class AdminService {
     return `This action removes a #${id} admin`;
   }
 
-  async markAttendance(user) : Promise<any> 
-  {
-    this.attendanceService.create({employeeID : user._id , year : new Date().getFullYear() , month : new Date().getMonth() + 1 , date : new Date().getDate() , present : true});
-  }
 }

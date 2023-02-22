@@ -7,11 +7,15 @@ import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { GenerateArrayFilter, ArrayFilter } from '@kartikyathakur/nestjs-query-filter';
 import { UsersService } from 'src/users/users.service';
+import { AttendanceService } from 'src/attendance/attendance.service';
+import mongoose from 'mongoose';
 
 @UseGuards(RoleGuard(Role.Admin))
 @Controller('admin')
 export class AdminController {
-  constructor(private readonly adminService: AdminService) {}
+  constructor(private readonly adminService: AdminService ,
+    private attendanceService : AttendanceService , 
+    private userService : UsersService) {}
   
   @Get('')
   @Render('Admin/adminHome')
@@ -44,7 +48,20 @@ export class AdminController {
     return {title : "View all employee" , userName : req.user.name, users : users};
   }
 
+  @Get('/employee-profile/:id')
+  @Render('Admin/employeeProfile')
+  async getEmployeeProfile(@Req() req , @Res() res)
+  {
+    var employeeID = req.params.id ; 
+    const user = await this.userService.findById(employeeID);
+    return {
+      title : "Employee Profile" , 
+      employee : user,
+      userName : req.user.name 
+    }
+  }
   
+  // Add and edit employee
 
   @Get('add-employee')
   @Render('Admin/addEmployee')
@@ -55,10 +72,9 @@ export class AdminController {
       hasErrors : false ,
       userName : req.user.name
     };
+
   }
 
-
-  // Add and edit employee
 
   @Post('add-employee')
   async addEmployee(@Body() createUserDto : CreateUserDto , @Res() res) {
@@ -69,16 +85,40 @@ export class AdminController {
 
   // Attendance 
 
-  @Get('view-attendance-current') 
-  async displayAttendanceCurrent(@Req() req)
+  @Post('view-attendance')
+  @Render('Admin/viewAttendanceSheet')
+  async displayAttendance(@Req() req , @Res() res) 
   {
+     let data = await this.attendanceService.findSpecificEmployee({employID : req.user._id , month : req.body.month , year : req.body.year});
+     return {
+      title : "Attendance sheet" ,  
+      month : req.body.month , 
+      found : data.found ,
+      attendance : data.attendanceChunk ,
+      userName : req.user.name 
+     }
+  }
 
+  @Get('view-attendance-current') 
+  @Render('Admin/viewAttendanceSheet')
+  async displayAttendanceCurrent(@Req() req , @Res() res)
+  {
+    let data = await this.attendanceService.findSpecificEmployee({employeeID : req.user._id , 
+      month : new Date().getMonth() + 1 , 
+      year : new Date().getFullYear()});
+    return {
+      title : "Attendance sheet" ,
+      month : new Date().getMonth() + 1,
+      found : data.found ,
+      attendance : data.attendanceChunk,
+      userName : req.user.name 
+    }
   }
 
   @Post('mark-attendance')
   async markEmployeeAttendance(@Req() req , @Res() res) 
   {
-    await this.adminService.markAttendance(req.user);
+    this.attendanceService.create({employeeID : req.user._id , year : new Date().getFullYear() , month : new Date().getMonth() + 1 , date : new Date().getDate() , present : true});
     res.redirect('view-attendance-current');
   }
 

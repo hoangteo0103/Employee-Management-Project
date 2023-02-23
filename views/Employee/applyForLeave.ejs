@@ -78,12 +78,16 @@
                                 <input type="text" class="form-control" required="required" id="title" name="title">
                             </div>
                             <div class="form-group">
-                                <label for="type">Type:</label>
-                                <input type="text" class="form-control" required="required" id="type" name="type">
-                            </div>
-                            <div class="form-group">
-                                <label for="period">Period of Leave:</label>
-                                <input type="number" pattern="^[0-9]" title='Only Number' min="1" step="1"  class="form-control" required="required" id="period" name="period">
+                                <label for="type">Absence Type:</label>
+                                <select class="form-control" id="type" name="type">
+                                    <option value="Annual Leave">Annual Leave</option>
+                                    <option value="Sick Leave">Sick Leave</option>
+                                    <option value="Personal Leave">Personal Leave</option>
+                                    <option value="Compensation Leave">Compensation Leave</option>
+                                    <option value="Unpaid Leave">Unpaid Leave</option>
+                                    <option value="Work From Home">Work From Home</option>
+                                    <option value="Other Leave  ">Other Leave</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="start_date">Start Date:</label>
@@ -101,7 +105,6 @@
                                 <textarea class="form-control" required="required" style="resize: none" id="reason"
                                           name="reason" rows="5" cols="60"></textarea></p>
                             </div>
-                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <button type="button" onclick="history.go(-1);" class="btn btn-default">Cancel</button>
                             <button type="submit" data-toggle="modal" data-target="#myModal1" class="btn btn-default">
                                 Apply
@@ -166,7 +169,6 @@
                 </div>
                 <div class="modal-footer">
 
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="reset" class="btn btn-default" data-dismiss="modal">No</button>
                     <button type="submit" class="btn btn-default">Yes</button>
                 </div>
@@ -210,7 +212,6 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="reset" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-default">View</button>
                 </div>

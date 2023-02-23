@@ -108,19 +108,19 @@
                                 <% } %>
                             </div>
                             <div class="form-group">
-                                <label for="DOB">Date of Birth:</label>
+                                <label for="dateOfBirth">Date of Birth:</label>
                                 <% if (hasErrors){ %>
                                 <input type="date" class="form-control"
                                        value="<%= new Date(user.dateOfBirth).toISOString().substring(0, 10); %>"
-                                       required="required" id="DOB" name="DOB">
+                                       required="required" id="dateOfBirth" name="dateOfBirth">
                                 <% }else{ %>
-                                <input type="date" class="form-control" required="required" id="DOB" name="DOB">
+                                <input type="date" class="form-control" required="required" id="dateOfBirth" name="dateOfBirth">
                                 <% } %>
 
                             </div>
 
                             <div class="form-group">
-                                <label for="username">Name:</label>
+                                <label for="username">Username:</label>
                                 <% if (hasErrors){ %>
                                 <input type="text" onkeypress="return onlyAlphabets(event,this);" class="form-control"
                                        value="<%= user.username %>" required="required" id="username" name="username">

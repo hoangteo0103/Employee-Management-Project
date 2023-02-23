@@ -50,31 +50,15 @@ export class EmployeeController {
     this.attendanceService.create({employeeID : req.user._id , year : new Date().getFullYear() , month : new Date().getMonth() + 1 , date : new Date().getDate() , present : true});
     res.redirect('view-attendance-current');
   }
- 
 
-
-  @Post()
-  create(@Body() createEmployeeDto: CreateEmployeeDto) {
-    return this.employeeService.create(createEmployeeDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.employeeService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.employeeService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEmployeeDto: UpdateEmployeeDto) {
-    return this.employeeService.update(+id, updateEmployeeDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.employeeService.remove(+id);
+  // Leaves related 
+  @Get('apply-for-leave') 
+  @Render('Employee/applyForLeave')
+  applyForLeave(@Req() req , @Res() res)
+  {
+    return {
+      title : "Apply for Leave" , 
+      userName : req.user.name 
+    }
   }
 }

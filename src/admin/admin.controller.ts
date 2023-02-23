@@ -147,24 +147,12 @@ export class AdminController {
   }
 
 
-
-  @Post()
-  create(@Body() createAdminDto: CreateAdminDto) {
-  }
-
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.adminService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAdminDto: UpdateAdminDto) {
-    return this.adminService.update(+id, updateAdminDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.adminService.remove(+id);
+  // Delete Employee
+  @Post("delete-employee/:id")
+  async deleteEmployee(@Res() res , @Param() params) 
+  {
+    const id = params.id ; 
+    await this.userService.remove(id) ; 
+    res.redirect('/admin/view-all-employees');
   }
 }

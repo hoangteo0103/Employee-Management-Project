@@ -38,6 +38,14 @@ export class AttendanceService {
     return {found : found , attendanceChunk : attendanceChunk};
   }
 
+  async findAttendanceEmployeeToday(employeeID : string) : Promise<AttendanceDocument> {
+      const date = new Date() ;
+      const day = date.getDate() ; 
+      const month = date.getMonth() + 1 ;
+      const year = date.getFullYear() ; 
+      const data = await this.attendanceModel.findOne({month : month , year : year , day : day , employeeID : employeeID}).exec() ; 
+      return data ; 
+    }
   findAll() {
     return `This action returns all attendance`;
   }
@@ -46,8 +54,8 @@ export class AttendanceService {
     return `This action returns a #${id} attendance`;
   }
 
-  update(id: number, updateAttendanceDto: UpdateAttendanceDto) {
-    return `This action updates a #${id} attendance`;
+  async update(id: string, updateAttendanceDto: any) {
+   await this.attendanceModel.findByIdAndUpdate(id , updateAttendanceDto );
   }
 
   remove(id: number) {

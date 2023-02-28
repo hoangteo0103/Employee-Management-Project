@@ -4,5 +4,7 @@ export class CreateAttendanceDto {
     year : number;
     month : number ;
     date : number ;
-    present : boolean;
+    isActive : boolean;
+    startTime : Date; 
+    duration : number ;
 }

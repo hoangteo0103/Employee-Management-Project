@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete ,Res , Req , Render, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete ,Res , Req , Render, UseGuards, ConsoleLogger } from '@nestjs/common';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import Role from 'src/users/role/roles.enum';
 import RoleGuard from 'src/users/role/roles.guards';
@@ -12,6 +12,7 @@ import mongoose from 'mongoose';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { LeaveService } from 'src/leave/leave.service';
 import * as moment from 'moment';
+import { title } from 'process';
 
 @UseGuards(RoleGuard(Role.Admin))
 @Controller('admin')
@@ -135,7 +136,7 @@ export class AdminController {
   @Post('mark-attendance')
   async markEmployeeAttendance(@Req() req , @Res() res) 
   {
-    this.attendanceService.create({employeeID : req.user._id , year : new Date().getFullYear() , month : new Date().getMonth() + 1 , date : new Date().getDate() , present : true});
+    this.attendanceService.create({employeeID : req.user._id , year : new Date().getFullYear() , month : new Date().getMonth() + 1 , date : new Date().getDate() , isActive : false , startTime : new Date() , duration : 0 });
     res.redirect('view-attendance-current');
   }
 
@@ -215,6 +216,85 @@ export class AdminController {
   {
     await this.leaveService.update(req.body['leave_id'] , {adminResponse : req.body.status});
     res.redirect('leave-applications');
+  }
+
+  @Get('clocking')
+  @Render('Admin/clocking')
+  async renderClock(@Req() req ){
+    const employeeID = req.user._id ; 
+    const attendance = await this.attendanceService.findAttendanceEmployeeToday(employeeID);
+    if(!attendance) 
+    {
+      return {
+        title : "Clocking",
+        isActive : false , 
+        userName : req.user.name,
+        duration : 0 ,
+      }
+    }
+    
+    let newDuration = attendance.duration;
+    if(attendance.isActive)
+    {
+      const newStartTime = new Date()  ;
+      newDuration = attendance.duration +  newStartTime.getSeconds() - attendance.startTime.getSeconds();
+      await this.attendanceService.update(attendance.id ,{ duration : newDuration});
+    }
+    return {
+      title : "Clocking",
+      isActive : attendance.isActive , 
+      startTime : attendance.startTime , 
+      duration : newDuration ,
+      userName : req.user.name 
+    }
+  }
+
+  @Post('mark-attendance-clocking')
+  @Render('Admin/clocking')
+  async markAttendanceClocking(@Req() req , @Res() res)
+  {
+    const employeeID = req.user._id ; 
+    const attendance = await this.attendanceService.findAttendanceEmployeeToday(employeeID) ;
+    if(!attendance)
+    {
+      const date = new Date() ; 
+      await this.attendanceService.create({employeeID : req.user._id , 
+        year : new Date().getFullYear() , 
+        month : new Date().getMonth() + 1 , 
+        date : new Date().getDate() , 
+        isActive : true , 
+        startTime : date, 
+        duration : 0 
+      });
+      return {
+        title : "Clocking" , 
+        isActive : true ,
+        startTime : date ,
+        duration : 0 ,
+        userName : req.user.name 
+      };
+    }
+    let isActive = true; 
+    if(attendance.isActive) isActive = false ; 
+    let newDuration = attendance.duration;
+    if(attendance.isActive)
+    {
+      console.log("ACTIVE");
+      const newStartTime = new Date()  ;
+      newDuration = attendance.duration +  newStartTime.getSeconds() - attendance.startTime.getSeconds();
+      await this.attendanceService.update(attendance.id ,{ duration : newDuration , isActive : false});
+    }
+    else {
+      console.log("INACTIVE")
+      const newStartTime = new Date() ;
+      await this.attendanceService.update(attendance._id ,{startTime : newStartTime , isActive : true});
+    }
+    return {
+      title : "Clocking" ,
+       isActive : isActive , 
+       duration : newDuration,
+       userName : req.user.name 
+    }
   }
 
 }

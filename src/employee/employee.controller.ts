@@ -69,7 +69,7 @@ export class EmployeeController {
   @Post('mark-employee-attendance')
   markEmployeeAttendance(@Req() req , @Res() res)
   {
-    this.attendanceService.create({employeeID : req.user._id , year : new Date().getFullYear() , month : new Date().getMonth() + 1 , date : new Date().getDate() , present : true});
+    this.attendanceService.create({employeeID : req.user._id , year : new Date().getFullYear() , month : new Date().getMonth() + 1 , date : new Date().getDate() , isActive : false , startTime : new Date() , duration : 0 });
     res.redirect('view-attendance-current');
   }
 

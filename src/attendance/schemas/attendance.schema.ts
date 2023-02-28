@@ -9,10 +9,10 @@ export class Attendance {
   employeeID : mongoose.Schema.Types.ObjectId;
 
   @Prop({require : true })
-  startTime : Number ; 
+  startTime : Date ; 
   
   @Prop({require : false})
-  endTime : Number ;
+  duration : number ;
 
   @Prop({required:true})
   year : Number ; 
@@ -24,7 +24,7 @@ export class Attendance {
   date : Number ; 
 
   @Prop({required:true})
-  present : Boolean;
+  isActive : Boolean;
 
 }
 

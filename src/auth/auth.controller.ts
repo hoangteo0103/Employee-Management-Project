@@ -23,9 +23,9 @@ export class AuthController {
 
   @Get('login')
   @Render('login')
-  loginMenu()
+  loginMenu(@Req() req)
   {
-    return {title : "Login" , hasErrors : false } ;
+    return {title : "Login" , hasErrors : false} ;
   }
 
 

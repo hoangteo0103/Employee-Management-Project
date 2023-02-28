@@ -25,13 +25,14 @@ export class AdminController {
   @Render('Admin/adminHome')
   displayHome(@Req() req)
   {
-    return {title : "Admin" , userName : req.user.name};
+    return {title : "Admin" , userName : req.user.name };
   }
   
   @Get('view-profile')
   @Render('Admin/viewProfile')
   viewProfileAdmin(@Req() req) {
-    return {title : "Profile" , employee : req.user , userName : req.user.name};
+    return {title : "Profile" , employee : req.user , userName : req.user.name ,      moment : moment 
+  };
   };
 
 
@@ -41,7 +42,7 @@ export class AdminController {
   async findAll(@GenerateArrayFilter() arrayFilter: ArrayFilter) {
     const users = await this.adminService.findAll();
     return users.filter(arrayFilter);
-  }
+    }
 
 
   @Get('view-all-employees')
@@ -61,7 +62,8 @@ export class AdminController {
     return {
       title : "Employee Profile" , 
       employee : user,
-      userName : req.user.name 
+      userName : req.user.name ,
+      csrfToken : req.csrfToken()
     }
   }
   
@@ -74,7 +76,7 @@ export class AdminController {
       title : "Add Employee" ,
       messages : "NONE" ,
       hasErrors : false ,
-      userName : req.user.name
+      userName : req.user.name, 
     };
 
   }
@@ -98,7 +100,9 @@ export class AdminController {
       month : req.body.month , 
       found : data.found ,
       attendance : data.attendanceChunk ,
-      userName : req.user.name 
+      userName : req.user.name ,
+      moment : moment 
+
      }
   }
 
@@ -114,7 +118,8 @@ export class AdminController {
       month : new Date().getMonth() + 1,
       found : data.found ,
       attendance : data.attendanceChunk,
-      userName : req.user.name 
+      userName : req.user.name ,
+      moment : moment 
     }
   }
 
@@ -137,7 +142,9 @@ export class AdminController {
       title : "Edit Employee" ,
       employee : user, 
       message : "" ,
-      userName : req.user.name
+      userName : req.user.name,
+      moment : moment 
+
     }
   }
 
@@ -168,7 +175,9 @@ export class AdminController {
     return {
       title : "List of Leave Applications " , 
       ...data , 
-      userName : req.user.name
+      userName : req.user.name,
+      moment : moment 
+
     }
   }
 
@@ -188,7 +197,7 @@ export class AdminController {
       leave : leave , 
       employee : employee , 
       userName : req.user.name ,
-      moment : moment 
+      moment : moment,
       
     }
   }

@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import * as cookieParser from 'cookie-parser';
+import * as csurf from 'csurf';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {

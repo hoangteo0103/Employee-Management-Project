@@ -77,7 +77,7 @@
                             <h4>Name : <label id="name"><%= employee.name %></label></h4>
                             <h4>Email : <label id="type"><%= employee.email %></label></h4>
                             <h4>Date of Birth : <label
-                                        id="dob"><%= employee.dateOfBirth %></label></h4>
+                                        id="dob"><%= moment(employee.dateOfBirth).format('MMMM Do YYYY') %></label></h4>
                             <h4>Department : <label id="department"><%= employee.department %></label></h4>
                             <h4>Designation : <label id="designation"><%= employee.designation %></label></h4>
                             <h4>Projects : <label id="projects">

@@ -98,7 +98,7 @@
                             <% attendance.forEach(function(item){ %>
 
                             <tr>
-                                <td><%= item.month + "/" + item.date + "/" + item.year %></td>
+                                <td><%= moment(item.month + "/" + item.date + "/" + item.year).format('MMMM Do YYYY'); %></td>
                                 <td>Present</td>
 
                             </tr>

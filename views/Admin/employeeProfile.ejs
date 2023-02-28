@@ -85,12 +85,43 @@
                             <h4>Email : <label id="type"><%= employee.email %></label></h4>
                             <!--<h4>Password : <label id="password">1234</label></h4>-->
                             <h4>Date of Birth : <label
-                                        id="dob"><%= employee.dateOfBirth8; %></label>
+                                        id="dob"><%= moment(employee.dateOfBirth).format('MMMM Do YYYY'); %></label>
                             </h4>
                             <h4>Contact Number : <label id="contact"><%= employee.contactNumber %></label></h4>
+                            <h4>Department : <label id="department"><% if(!employee.department){%>
+                                    <%="N/A"%>
+                                    <%
+                                    }
+                                    else{%>
+                                    <%=employee.department%>
+                                    <%}%></label></h4>
+                            <h4>Designation : <label id="designation"><% if(!employee.designation){%>
+                                    <%="N/A"%>
+                                    <%
+                                    }
+                                    else{%>
+                                    <%=employee.designation%>
+                                    <%}%></label></h4>
                             <h4>Attendance : <label id="projects">
                                     <button type="submit" class="form-control">View Attendance</button>
                                 </label></h4>
+                            <h4>Skills:
+                                <% if(employee.Skills.length === 0){ %>
+                                <label>N/A</label>
+                                <% } %>
+                            </h4>
+                            <div style="height: 250px; overflow: auto;">
+                                <ul class="list-group" id="skills">
+                                    <%
+                                    employee.Skills.forEach(function(val){
+                                    if(val != ""){ %>
+                                    <li class="list-group-item"><%= val %></li>
+
+                                    <% }
+                                    })
+                                    %>
+                                </ul>
+                            </div>
 
                         </form>
                     </div>

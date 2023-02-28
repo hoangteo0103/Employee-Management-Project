@@ -86,6 +86,7 @@
                                 <th>Title</th>
                                 <th>Type</th>
                                 <th>Applied Date</th>
+                                <th>Period(Days)</th>
                                 <th>Status</th>
 
                                 <th></th>
@@ -97,6 +98,7 @@
                                 <th>Title</th>
                                 <th>Type</th>
                                 <th>Applied Date</th>
+                                <th>Period(Days)</th>
                                 <th>Status</th>
                                 <th></th>
                             </tr>
@@ -107,12 +109,13 @@
                                 <td><%= employees[i].name %></td>
                                 <td><%= leaves[i].title %></td>
                                 <td><%= leaves[i].type %></td>
-                                <td><%= leaves[i].appliedDate %></td>
+                                <td><%= moment(leaves[i].appliedDate).format('MMMM Do YYYY') %></td>
+                                <td><%= leaves[i].period %></td>
                                 <td><%= leaves[i].adminResponse %></td>
                                 <td>
                                     <form method="get"
                                           action="/admin/respond-application/<%= leaves[i]._id %>/<%= employees[i]._id %>">
-                                        <button type="submit"><i class="fa fa-reply fa-lg" title="Respond"
+                                        <button type="submit"><i class="fa fa-reply fa-lg" title="Responsd"
                                                                  aria-hidden="true"></i></button>
                                     </form>
                                 </td>

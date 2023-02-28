@@ -86,7 +86,6 @@
                                 <th>Title</th>
                                 <th>Type</th>
                                 <th>Applied Date</th>
-                                <th>Period(Days)</th>
                                 <th>Status</th>
 
                                 <th></th>
@@ -98,7 +97,6 @@
                                 <th>Title</th>
                                 <th>Type</th>
                                 <th>Applied Date</th>
-                                <th>Period(Days)</th>
                                 <th>Status</th>
                                 <th></th>
                             </tr>
@@ -109,13 +107,12 @@
                                 <td><%= employees[i].name %></td>
                                 <td><%= leaves[i].title %></td>
                                 <td><%= leaves[i].type %></td>
-                                <td><%= moment(leaves[i].appliedDate).format('MMMM Do YYYY') %></td>
-                                <td><%= leaves[i].period %></td>
+                                <td><%= leaves[i].appliedDate %></td>
                                 <td><%= leaves[i].adminResponse %></td>
                                 <td>
                                     <form method="get"
                                           action="/admin/respond-application/<%= leaves[i]._id %>/<%= employees[i]._id %>">
-                                        <button type="submit"><i class="fa fa-reply fa-lg" title="Responsd"
+                                        <button type="submit"><i class="fa fa-reply fa-lg" title="Respond"
                                                                  aria-hidden="true"></i></button>
                                     </form>
                                 </td>
@@ -195,7 +192,6 @@
                     <p>Are you sure you want to mark attendance.</p>
                 </div>
                 <div class="modal-footer">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="reset" class="btn btn-default" data-dismiss="modal">No</button>
                     <button type="submit" class="btn btn-default">Yes</button>
                 </div>
@@ -239,7 +235,6 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="reset" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-default">View</button>
                 </div>

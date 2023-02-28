@@ -5,12 +5,15 @@ import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import RoleGuard from 'src/users/role/roles.guards';
 import Role from 'src/users/role/roles.enum';
 import { AttendanceService } from 'src/attendance/attendance.service';
+import { CreateLeaveDto } from 'src/leave/dto/create-leave.dto';
+import { LeaveService } from 'src/leave/leave.service';
 
 @UseGuards(RoleGuard(Role.Employee))
 @Controller('employee')
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService , 
-    private attendanceService : AttendanceService) {}
+    private attendanceService : AttendanceService,
+    private leaveService : LeaveService) {}
 
   @Get('')
   @Render('Employee/employeeHome')
@@ -54,11 +57,34 @@ export class EmployeeController {
   // Leaves related 
   @Get('apply-for-leave') 
   @Render('Employee/applyForLeave')
-  applyForLeave(@Req() req , @Res() res)
+  applyForLeaveView(@Req() req , @Res() res)
   {
     return {
       title : "Apply for Leave" , 
       userName : req.user.name 
     }
+  };
+
+  @Post('apply-for-leave')
+  applyForLeave(@Req() req , @Res() res , @Body() createLeaveDto : CreateLeaveDto)
+  {
+    createLeaveDto.appliedDate = new Date() ; 
+    createLeaveDto.applicantID = req.user.id ; 
+    this.leaveService.create(createLeaveDto);  
+    res.redirect('view-profile');
   }
+
+  @Get('applied-leaves') 
+  @Render('Employee/appliedLeaves')
+  async viewAppliedLeaves(@Req() req , @Res() res)
+  {
+    const data = await this.leaveService.findById(req.user.id) ;
+    return {
+      title : "List Of Applied Leaves" , 
+      hasLeave : data.hasLeave , 
+      leaves : data.leaveChunk , 
+      userName : req.user.name
+    }
+  }
+ 
 }

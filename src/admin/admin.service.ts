@@ -8,6 +8,8 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateAttendanceDto } from 'src/attendance/dto/create-attendance.dto';
 import { AttendanceService } from 'src/attendance/attendance.service';
 import mongoose from 'mongoose';
+import { Leave } from 'src/leave/entities/leave.entity';
+import { LeaveService } from 'src/leave/leave.service';
 
 
 @Injectable()
@@ -15,7 +17,8 @@ export class AdminService {
   constructor(
     private usersService: UsersService,
     private jwtService : JwtService,
-    private attendanceService : AttendanceService
+    private attendanceService : AttendanceService,
+    private leaveService : LeaveService
   ) {}
   async create(createUserDto: CreateUserDto): Promise<any> {
       // Check if user exists
@@ -43,16 +46,19 @@ export class AdminService {
     return t;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} admin`;
+  async viewAllApplications()
+  {
+    const {hasLeave , leaveChunk } = await this.leaveService.findAll() ; 
+    let employeeChunk = [];
+    for(var i = 0 ; i < leaveChunk.length ; i++)
+    {
+      const user = await this.usersService.findById(leaveChunk[i].applicantID);
+      employeeChunk.push(user);
+    }
+    return { 
+      hasLeave : hasLeave , 
+      leaves : leaveChunk , 
+      employees : employeeChunk ,
+    }
   }
-
-  update(id: number, updateAdminDto: UpdateAdminDto) {
-    return `This action updates a #${id} admin`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} admin`;
-  }
-
 }

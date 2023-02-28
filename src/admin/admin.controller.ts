@@ -10,13 +10,16 @@ import { UsersService } from 'src/users/users.service';
 import { AttendanceService } from 'src/attendance/attendance.service';
 import mongoose from 'mongoose';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
+import { LeaveService } from 'src/leave/leave.service';
+import * as moment from 'moment';
 
 @UseGuards(RoleGuard(Role.Admin))
 @Controller('admin')
 export class AdminController {
   constructor(private readonly adminService: AdminService ,
     private attendanceService : AttendanceService , 
-    private userService : UsersService) {}
+    private userService : UsersService,
+    private leaveService : LeaveService) {}
   
   @Get('')
   @Render('Admin/adminHome')
@@ -155,4 +158,39 @@ export class AdminController {
     await this.userService.remove(id) ; 
     res.redirect('/admin/view-all-employees');
   }
+
+  // Leave related 
+  @Get('leave-applications')
+  @Render('Admin/allApplications')
+  async viewAllApplications(@Res() res , @Req() req)
+  {
+    const data = await this.adminService.viewAllApplications();
+    return {
+      title : "List of Leave Applications " , 
+      ...data , 
+      userName : req.user.name
+    }
+  }
+
+  @Get('respond-application/:leave_id/:employee_id')
+  @Render('Admin/applicationResponse')
+  async viewApplicationRespond(@Req() req , @Res() res)
+  {
+    const leaveId = req.params.leave_id ; 
+    const employeeID = req.params.employee_id ;
+
+    const leave = await this.leaveService.findById(leaveId) ; 
+    const employee = await this.userService.findById(employeeID) ; 
+
+
+    return {
+      title : "Respond Leave Application" ,
+      leave : leave , 
+      employee : employee , 
+      userName : req.user.name ,
+      moment : moment 
+      
+    }
+  }
+
 }

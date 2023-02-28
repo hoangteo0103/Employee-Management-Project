@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,6 +19,13 @@ export class UsersService {
     return this.userModel.find().exec();
   }
 
+  async findFilter(queryObj:any) {
+    let queryStr = JSON.stringify(queryObj) ;
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g , match => `$${match}`) 
+    const users = await this.userModel.find(queryObj) ;
+    return users ; 
+  }
+
   async findById(id: string): Promise<UserDocument> {
     return this.userModel.findById(id);
   }
@@ -36,6 +43,13 @@ export class UsersService {
     return this.userModel
       .findByIdAndUpdate(id, updateUserDto.refreshToken, { new: true })
       .exec();
+  }
+
+  async updateF(
+    id : string , 
+    opts : Object 
+  ) : Promise<UserDocument> {
+    return this.userModel.findByIdAndUpdate(id , opts , {new : true}).exec();
   }
 
   async update(

@@ -17,10 +17,11 @@ export class AttendanceService {
        date : date.getDate()})
     .exec(function(err , docs) {
       if(docs.length > 0)
-      throw new BadRequestException("Already mark attendance");
+      {
+        throw new BadRequestException("Already mark attendance");
+      }
     });
     const createdAttendance = new this.attendanceModel(createAttendanceDto);
-
     return createdAttendance.save();
   }
   

@@ -284,7 +284,7 @@ footer a {
 			<h1>Sign in</h1>
 			<input type="text" placeholder="username" name = "username" />
 			<input type="password" placeholder="Password" name = "password" />
-			<a href="#">Forgot your password?</a>
+			<a href="#" id = "forgot-password">Forgot your password?</a>
 			<button>Sign In</button>
 		</form>
 	</div>
@@ -308,17 +308,35 @@ footer a {
 
 <script src="/javascripts/index.js"></script>
 <script>
-    const signUpButton = document.getElementById('signUp');
+const signUpButton = document.getElementById('signUp');
 const signInButton = document.getElementById('signIn');
 const container = document.getElementById('container');
+const forgotPasswordBtn = document.getElementById('forgot-password'); 
+const signupContainer = document.querySelector('.sign-up-container') ;
 
 signUpButton.addEventListener('click', () => {
+	signupContainer.innerHTML = `<form action="/auth/signup" method="POST">
+			<h1>Create Account</h1>
+			<input type="text" placeholder="Name" name = "name" />
+			<input type="email" placeholder="Email" name = "email" />
+			<button>Sign Up</button>
+		</form>`;
 	container.classList.add("right-panel-active");
 });
 
 signInButton.addEventListener('click', () => {
 	container.classList.remove("right-panel-active");
 });
+
+forgotPasswordBtn.addEventListener('click' , () => {
+	container.classList.add("right-panel-active");
+	signupContainer.innerHTML = `<form action="/auth/reset-password" method="POST">
+			<h1>Forgot password</h1>
+			<input type="email" placeholder="Email" name = "email" />
+			<button>Reset Password</button>
+		</form>`;
+	
+})
 </script>
 
 

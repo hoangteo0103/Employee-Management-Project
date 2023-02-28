@@ -28,7 +28,12 @@ export class AuthController {
     return {title : "Login" , hasErrors : false} ;
   }
 
-
+  @Post('reset-password') 
+  async resetPassword(@Req() req , @Res() res)
+  {
+    await this.authService.resetPassword(req.body.email) ; 
+    res.redirect('login');
+  }
 
   @Post('signup')
   async signup(@Body() createUserDto : CreateUserDto , @Res() res) {

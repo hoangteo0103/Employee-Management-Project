@@ -4,7 +4,7 @@ import { CreateLeaveDto } from './dto/create-leave.dto';
 import { UpdateLeaveDto } from './dto/update-leave.dto';
 import { Leave } from './entities/leave.entity';
 import { LeaveDocument } from './schema/leave.schema';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 
 @Injectable()
 export class LeaveService {
@@ -40,6 +40,11 @@ export class LeaveService {
     return {hasLeave : hasLeave , leaveChunk : leaveChunk};
   }
   
+   async findOneById(id : string) : Promise<any> {
+    const docs = await this.leaveModel.findById(id).exec() ; 
+    return docs;
+
+   }
    async findById(id: string): Promise<any> {
     let hasLeave = 0, leaveChunk = []; 
     const docs = await this.leaveModel.find({applicantID : id}).sort({_id : -1}).exec() ; 
@@ -51,8 +56,8 @@ export class LeaveService {
     return {hasLeave : hasLeave , leaveChunk : leaveChunk};
   }
 
-  update(id: number, updateLeaveDto: UpdateLeaveDto) {
-    return `This action updates a #${id} leave`;
+  async update(id, updateLeaveDto: Object)  {
+    return  this.leaveModel.findByIdAndUpdate(id , updateLeaveDto , {new : true}).exec();
   }
 
   remove(id: number) {

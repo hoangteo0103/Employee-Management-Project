@@ -11,7 +11,7 @@ export class CreateUserDto {
     name : string;
 
     contactNumber : string;
-    dateOfBirth : string ;
+    dateOfBirth : Date ;
     refreshToken: string;
     Skills : string[] ;
     designation : string ; 

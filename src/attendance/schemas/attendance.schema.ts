@@ -8,6 +8,12 @@ export class Attendance {
   @Prop({required:true})
   employeeID : mongoose.Schema.Types.ObjectId;
 
+  @Prop({require : true })
+  startTime : Number ; 
+  
+  @Prop({require : false})
+  endTime : Number ;
+
   @Prop({required:true})
   year : Number ; 
 

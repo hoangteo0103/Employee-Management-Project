@@ -37,12 +37,21 @@ export class AdminController {
 
 
   // View Employeee
+  
 
+  // Query filter 
   @Get('view-employees')
-  async findAll(@GenerateArrayFilter() arrayFilter: ArrayFilter) {
-    const users = await this.adminService.findAll();
-    return users.filter(arrayFilter);
-    }
+  async findFilter(@Res() res , @Req() req) 
+  {
+    const users = await this.adminService.findFilter(req.query) ;
+    res.json(users);
+  }
+  
+  // @Get('view-employees')
+  // async findAll(@GenerateArrayFilter() arrayFilter: ArrayFilter) {
+  //   const users = await this.adminService.findAll();
+  //   return users.filter(arrayFilter);
+  // }
 
 
   @Get('view-all-employees')
@@ -188,9 +197,8 @@ export class AdminController {
     const leaveId = req.params.leave_id ; 
     const employeeID = req.params.employee_id ;
 
-    const leave = await this.leaveService.findById(leaveId) ; 
+    const leave = await this.leaveService.findOneById(leaveId) ; 
     const employee = await this.userService.findById(employeeID) ; 
-
 
     return {
       title : "Respond Leave Application" ,
@@ -200,6 +208,13 @@ export class AdminController {
       moment : moment,
       
     }
+  }
+
+  @Post('respond-application')
+  async respondLeaveApplication(@Res() res , @Req() req)
+  {
+    await this.leaveService.update(req.body['leave_id'] , {adminResponse : req.body.status});
+    res.redirect('leave-applications');
   }
 
 }

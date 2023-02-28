@@ -46,6 +46,12 @@ export class AdminService {
     return t;
   }
 
+  async findFilter(opts)
+  {
+    const t = await this.usersService.findFilter(opts) ;
+    return t; 
+  }
+
   async viewAllApplications()
   {
     const {hasLeave , leaveChunk } = await this.leaveService.findAll() ; 

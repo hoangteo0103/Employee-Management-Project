@@ -7,6 +7,7 @@ import { AuthDto } from './dto/auth.dto';
 import { constantsJWT } from './jwt-secret';
 import { ForbiddenException } from '@nestjs/common';
 import { MailService } from 'src/mail/mail.service';
+import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -30,6 +31,20 @@ export class AuthService {
     return str.normalize('NFD')
               .replace(/[\u0300-\u036f]/g, '')
               .replace(/đ/g, 'd').replace(/Đ/g, 'D');
+  }
+
+  async resetPassword(email : string ) {
+    const user= await this.usersService.findByEmail(
+      email
+    );
+    if (!user) {
+      throw new BadRequestException('User not exists');
+    }
+
+    const password = this.generatePassword() ; 
+    const hash = await this.hashData(password) ; 
+    this.usersService.updateF(user.id,{password : hash});
+    await this.mailService.sendResetPassword(email , user.name , user.username , password) ; 
   }
 
   async signUp(createUserDto : CreateUserDto): Promise<any> {

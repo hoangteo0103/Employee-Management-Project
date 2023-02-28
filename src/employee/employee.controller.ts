@@ -7,6 +7,7 @@ import Role from 'src/users/role/roles.enum';
 import { AttendanceService } from 'src/attendance/attendance.service';
 import { CreateLeaveDto } from 'src/leave/dto/create-leave.dto';
 import { LeaveService } from 'src/leave/leave.service';
+import * as moment from 'moment';
 
 @UseGuards(RoleGuard(Role.Employee))
 @Controller('employee')
@@ -26,13 +27,30 @@ export class EmployeeController {
   @Render('Employee/viewProfile')
   viewProfileEmployee(@Req() req)
   {
-    return {title : "Profile" , employee : req.user , userName : req.user.name};
+    return {title : "Profile" , employee : req.user , userName : req.user.name ,moment : moment  };
   }
 
   // Attendance 
 
+  @Post('view-attendance')
+  @Render('Employee/viewAttendance')
+  async displayAttendance(@Req() req , @Res() res)
+  {
+    let data = await this.attendanceService.findSpecificEmployee({employeeID : req.user._id , 
+      month : req.body.month , 
+      year : new Date().getFullYear()});
+    return {
+      title : "Attendance sheet" ,
+      month : req.body.month,
+      found : data.found ,
+      attendance : data.attendanceChunk,
+      userName : req.user.name , 
+      moment : moment 
+    }
+  }
+
   @Get('view-attendance-current') 
-  @Render('Admin/viewAttendanceSheet')
+  @Render('Employee/viewAttendance')
   async displayAttendanceCurrent(@Req() req , @Res() res)
   {
     let data = await this.attendanceService.findSpecificEmployee({employeeID : req.user._id , 
@@ -43,7 +61,8 @@ export class EmployeeController {
       month : new Date().getMonth() + 1,
       found : data.found ,
       attendance : data.attendanceChunk,
-      userName : req.user.name 
+      userName : req.user.name ,
+      moment : moment 
     }
   }
 
@@ -83,7 +102,8 @@ export class EmployeeController {
       title : "List Of Applied Leaves" , 
       hasLeave : data.hasLeave , 
       leaves : data.leaveChunk , 
-      userName : req.user.name
+      userName : req.user.name,
+      moment : moment
     }
   }
  

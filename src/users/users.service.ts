@@ -16,17 +16,27 @@ export class UsersService {
   }
 
   async findAll(): Promise<UserDocument[]> {
-    return this.userModel.find().exec();
+    const docs = await this.userModel.find().exec();
+    for(var i = 0 ; i < docs.length ; i++) 
+    {
+      if(docs[i].username ==='admin') {
+        {
+          docs.splice(i , 1 ) ; 
+          break ; 
+        }
+      }
+    }
+    return docs;
   }
 
   async findFilter(queryObj:any) {
     let queryStr = JSON.stringify(queryObj) ;
-    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g , match => `$${match}`) 
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt|eq)\b/g , match => `$${match}`) 
     const users = await this.userModel.find(queryObj) ;
     return users ; 
   }
 
-  async findById(id: string): Promise<UserDocument> {
+  async findById(id: any): Promise<UserDocument> {
     return this.userModel.findById(id);
   }
   async findByEmail(email: string): Promise<UserDocument> {

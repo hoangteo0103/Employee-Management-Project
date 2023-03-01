@@ -45,9 +45,22 @@ export class AttendanceService {
       const year = date.getFullYear() ; 
       const data = await this.attendanceModel.findOne({month : month , year : year , day : day , employeeID : employeeID}).exec() ; 
       return data ; 
-    }
-  findAll() {
-    return `This action returns all attendance`;
+  }
+
+  async findFilter(queryObj:any) {
+    let queryStr = JSON.stringify(queryObj) ;
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt|eq)\b/g , match => `$${match}`) 
+    const users = await this.attendanceModel.find(queryObj) ;
+    return users ; 
+  }
+
+  async findAllActive() : Promise<any>  {
+    const date = new Date() ; 
+    const day = date.getDate() ; 
+    const month = date.getMonth() + 1 ; 
+    const year = date.getFullYear() ;
+    const data = await this.attendanceModel.find({year : year , month : month , day : day , isActive : true}).exec(); 
+    return data ;
   }
 
   findOne(id: number) {

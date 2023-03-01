@@ -104,16 +104,23 @@ export class AdminController {
   @Render('Admin/viewAttendanceSheet')
   async displayAttendance(@Req() req , @Res() res) 
   {
-     let data = await this.attendanceService.findSpecificEmployee({employID : req.user._id , month : req.body.month , year : req.body.year});
-     return {
-      title : "Attendance sheet" ,  
-      month : req.body.month , 
-      found : data.found ,
-      attendance : data.attendanceChunk ,
-      userName : req.user.name ,
-      moment : moment 
-
+     let userList = [] ; 
+     let attendanceList = await this.attendanceService.findFilter({month : req.body.month , year : new Date().getFullYear()}) ;
+     for(const attendance of attendanceList)
+     {
+      const user = await this.userService.findById(attendance.employeeID) ; 
+      userList.push(user) ; 
      }
+     
+     return {
+      title : "Attendance sheet" , 
+      userName : req.user.name , 
+      moment : moment , 
+      found : attendanceList.length > 0 , 
+      userList : userList , 
+      attendanceList : attendanceList 
+     }
+  
   }
 
   @Get('view-attendance-current') 
@@ -234,16 +241,17 @@ export class AdminController {
     }
     
     let newDuration = attendance.duration;
+    let newStartTime = attendance.startTime ;
     if(attendance.isActive)
     {
-      const newStartTime = new Date()  ;
+      newStartTime = new Date()  ;
       newDuration = attendance.duration +  newStartTime.getSeconds() - attendance.startTime.getSeconds();
-      await this.attendanceService.update(attendance.id ,{ duration : newDuration});
+      await this.attendanceService.update(attendance.id ,{ duration : newDuration , startTime : newStartTime});
     }
     return {
       title : "Clocking",
       isActive : attendance.isActive , 
-      startTime : attendance.startTime , 
+      startTime : newStartTime , 
       duration : newDuration ,
       userName : req.user.name 
     }
@@ -266,13 +274,7 @@ export class AdminController {
         startTime : date, 
         duration : 0 
       });
-      return {
-        title : "Clocking" , 
-        isActive : true ,
-        startTime : date ,
-        duration : 0 ,
-        userName : req.user.name 
-      };
+      res.redirect('clocking');
     }
     let isActive = true; 
     if(attendance.isActive) isActive = false ; 
@@ -289,12 +291,30 @@ export class AdminController {
       const newStartTime = new Date() ;
       await this.attendanceService.update(attendance._id ,{startTime : newStartTime , isActive : true});
     }
+    res.redirect('clocking');
+  }
+
+  // Active list 
+  @Get('view-active')
+  @Render('Admin/viewActive')
+  async viewActiveList(@Req() req)
+  {
+    const activeList = await this.attendanceService.findAllActive() ; 
+    let userList =  [] ; 
+    for(const attendance of activeList) {
+      const user = await this.userService.findById(attendance.employeeID); 
+      userList.push(user) ; 
+    }
+
     return {
-      title : "Clocking" ,
-       isActive : isActive , 
-       duration : newDuration,
-       userName : req.user.name 
+      title : "View active" , 
+      found : activeList.length > 0,
+      activeList : activeList , 
+      userList : userList ,
+      userName : req.user.name 
     }
   }
+
+
 
 }

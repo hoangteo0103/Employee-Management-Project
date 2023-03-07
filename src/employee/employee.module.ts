@@ -5,8 +5,8 @@ import { AttendanceModule } from 'src/attendance/attendance.module';
 import { LeaveModule } from 'src/leave/leave.module';
 
 @Module({
-  imports : [AttendanceModule , LeaveModule],
+  imports: [AttendanceModule, LeaveModule],
   controllers: [EmployeeController],
-  providers: [EmployeeService]
+  providers: [EmployeeService],
 })
 export class EmployeeModule {}

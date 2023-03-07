@@ -9,23 +9,20 @@ type JwtPayload = {
   username: string;
 };
 
-const extactFromCookie = request => {
-  let token = null
-  if (request && request.cookies) token = request.cookies["access_token"]
-  return token
-}
-
+const extactFromCookie = (request) => {
+  let token = null;
+  if (request && request.cookies) token = request.cookies['access_token'];
+  return token;
+};
 
 @Injectable()
 export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
-  constructor(
-    private userService : UsersService
-  ) {
+  constructor(private userService: UsersService) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([extactFromCookie]),
-      secretOrKey:constantsJWT[0],
+      secretOrKey: constantsJWT[0],
     });
-  };
+  }
 
   validate(payload: JwtPayload) {
     return this.userService.findById(payload.sub);

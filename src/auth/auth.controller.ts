@@ -16,43 +16,45 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { RefreshTokenGuard } from 'src/common/guards/refreshToken.guards';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UsersService,
+  ) {}
 
   @Get('login')
   @Render('login')
-  loginMenu(@Req() req)
-  {
-    return {title : "Login" , hasErrors : false} ;
+  loginMenu(@Req() req) {
+    return { title: 'Login', hasErrors: false };
   }
 
-  @Post('reset-password') 
-  async resetPassword(@Req() req , @Res() res)
-  {
-    await this.authService.resetPassword(req.body.email) ; 
+  @Post('reset-password')
+  async resetPassword(@Req() req, @Res() res) {
+    await this.authService.resetPassword(req.body.email);
     res.redirect('login');
   }
 
   @Post('signup')
-  async signup(@Body() createUserDto : CreateUserDto , @Res() res) {
-    console.log(createUserDto.email);
+  async signup(@Body() createUserDto: CreateUserDto, @Res() res) {
     await this.authService.signUp(createUserDto);
     res.redirect('login');
   }
 
   @Post('signin')
-  async signin(@Body() data: AuthDto , @Res() res) {
-    const jwt_token  = await this.authService.signIn(data);
-    res.cookie('access_token' , jwt_token.accessToken);
-    res.cookie('refresh_token' , jwt_token.refreshToken);
-    if(data.username == "admin") res.redirect('/admin');
-    else res.redirect('/employee');
+  async signin(@Body() data: AuthDto, @Req() req, @Res() res) {
+    const jwt_token = await this.authService.signIn(data);
+    res.cookie('access_token', jwt_token.accessToken);
+    res.cookie('refresh_token', jwt_token.refreshToken);
+    const user = await this.userService.findByUsername(data.username);
+    res.redirect(`/${user.role}`);
   }
   @UseGuards(AccessTokenGuard)
   @Get('logout')
-  logout(@Req() req: Request , @Res() res) {
+  logout(@Req() req: Request, @Res() res) {
+    console.log(req.user['sub']);
     this.authService.logout(req.user['sub']);
     res.redirect('/');
   }

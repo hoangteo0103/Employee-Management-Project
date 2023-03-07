@@ -1,34 +1,33 @@
-import { Prop , Schema , SchemaFactory } from "@nestjs/mongoose";
-import mongoose , {Document} from "mongoose";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import mongoose, { Document } from 'mongoose';
 
-export type LeaveDocument = Leave & Document ; 
+export type LeaveDocument = Leave & Document;
 
 @Schema()
 export class Leave {
-    @Prop({required:true})
-    applicantID : mongoose.Schema.Types.ObjectId ; 
+  @Prop({ required: true })
+  applicantID: mongoose.Schema.Types.ObjectId;
 
-    @Prop({required:true})
-    title : string ;
+  @Prop({ required: true })
+  title: string;
 
-    @Prop({required:true})
-    type : String ; 
+  @Prop({ required: true })
+  type: string;
 
-    @Prop({require:true})
-    startDate : Date ;
+  @Prop({ require: true })
+  startDate: Date;
 
-    @Prop({require:true})
-    endDate : Date ;
-    
-    @Prop({require:true})
-    appliedDate : Date ;
-    
+  @Prop({ require: true })
+  endDate: Date;
 
-    @Prop({require : true})
-    reason : String ; 
+  @Prop({ require: true })
+  appliedDate: Date;
 
-    @Prop({default:"N/A"}) 
-    adminResponse : String ;
+  @Prop({ require: true })
+  reason: string;
+
+  @Prop({ default: 'N/A' })
+  adminResponse: string;
 }
 
 export const LeaveSchema = SchemaFactory.createForClass(Leave);

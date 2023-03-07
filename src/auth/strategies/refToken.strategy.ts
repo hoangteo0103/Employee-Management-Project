@@ -4,11 +4,11 @@ import { Request } from 'express';
 import { Injectable } from '@nestjs/common';
 import { constantsJWT } from '../jwt-secret';
 
-const extactFromCookie = request => {
-  let token = null
-  if (request && request.cookies) token = request.cookies["refresh_token"]
-  return token
-}
+const extactFromCookie = (request) => {
+  let token = null;
+  if (request && request.cookies) token = request.cookies['refresh_token'];
+  return token;
+};
 
 @Injectable()
 export class RefreshTokenStrategy extends PassportStrategy(
@@ -24,7 +24,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
   }
 
   validate(req: Request, payload: any) {
-    const refreshToken = req.cookies["refresh_token"];
+    const refreshToken = req.cookies['refresh_token'];
     return { ...payload, refreshToken };
   }
 }

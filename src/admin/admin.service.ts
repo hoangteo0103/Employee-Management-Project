@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable , Req} from '@nestjs/common';
+import { BadRequestException, Injectable, Req } from '@nestjs/common';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import * as argon2 from 'argon2';
@@ -10,31 +10,37 @@ import { AttendanceService } from 'src/attendance/attendance.service';
 import mongoose from 'mongoose';
 import { Leave } from 'src/leave/entities/leave.entity';
 import { LeaveService } from 'src/leave/leave.service';
-
+import Role from 'src/users/role/roles.enum';
 
 @Injectable()
 export class AdminService {
   constructor(
     private usersService: UsersService,
-    private jwtService : JwtService,
-    private attendanceService : AttendanceService,
-    private leaveService : LeaveService
+    private jwtService: JwtService,
+    private attendanceService: AttendanceService,
+    private leaveService: LeaveService,
   ) {}
   async create(createUserDto: CreateUserDto): Promise<any> {
-      // Check if user exists
-      const userExists = await this.usersService.findByUsername(
-        createUserDto.username,
-      );
-      if (userExists) {
-        throw new BadRequestException('User already exists');
-      }
-  
-      // Hash password
-      const hash = await this.hashData(createUserDto.password);
-      const newUser = await this.usersService.create({
-        ...createUserDto,
-        password: hash,
-      });
+    // Check if user exists
+    const userExists = await this.usersService.findByUsername(
+      createUserDto.username,
+    );
+    if (userExists) {
+      throw new BadRequestException('User already exists');
+    }
+
+    // Role designation
+
+    if (createUserDto.designation.includes('Manager'))
+      createUserDto.role = Role.Manager;
+    else createUserDto.role = Role.Employee;
+
+    // Hash password
+    const hash = await this.hashData(createUserDto.password);
+    const newUser = await this.usersService.create({
+      ...createUserDto,
+      password: hash,
+    });
   }
 
   hashData(data: string) {
@@ -46,25 +52,22 @@ export class AdminService {
     return t;
   }
 
-  async findFilter(opts)
-  {
-    const t = await this.usersService.findFilter(opts) ;
-    return t; 
+  async findFilter(opts) {
+    const t = await this.usersService.findFilter(opts);
+    return t;
   }
 
-  async viewAllApplications()
-  {
-    const {hasLeave , leaveChunk } = await this.leaveService.findAll() ; 
-    let employeeChunk = [];
-    for(var i = 0 ; i < leaveChunk.length ; i++)
-    {
+  async viewAllApplications() {
+    const { hasLeave, leaveChunk } = await this.leaveService.findAll();
+    const employeeChunk = [];
+    for (let i = 0; i < leaveChunk.length; i++) {
       const user = await this.usersService.findById(leaveChunk[i].applicantID);
       employeeChunk.push(user);
     }
-    return { 
-      hasLeave : hasLeave , 
-      leaves : leaveChunk , 
-      employees : employeeChunk ,
-    }
+    return {
+      hasLeave: hasLeave,
+      leaves: leaveChunk,
+      employees: employeeChunk,
+    };
   }
 }

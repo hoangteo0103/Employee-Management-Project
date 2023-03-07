@@ -5,9 +5,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Leave } from './entities/leave.entity';
 import { LeaveSchema } from './schema/leave.schema';
 @Module({
-  imports : [MongooseModule.forFeature([{ name: Leave.name, schema: LeaveSchema }])],
+  imports: [
+    MongooseModule.forFeature([{ name: Leave.name, schema: LeaveSchema }]),
+  ],
   controllers: [LeaveController],
   providers: [LeaveService],
-  exports : [LeaveService]
+  exports: [LeaveService],
 })
 export class LeaveModule {}

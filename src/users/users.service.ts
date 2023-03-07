@@ -1,10 +1,9 @@
-import { ConsoleLogger, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
-import { CreateAttendanceDto } from 'src/attendance/dto/create-attendance.dto';
 
 @Injectable()
 export class UsersService {
@@ -16,55 +15,68 @@ export class UsersService {
   }
 
   async findAll(): Promise<UserDocument[]> {
-    const docs = await this.userModel.find().exec();
-    for(var i = 0 ; i < docs.length ; i++) 
-    {
-      if(docs[i].username ==='admin') {
+    const docs = await this.userModel
+      .aggregate([
         {
-          docs.splice(i , 1 ) ; 
-          break ; 
-        }
-      }
-    }
+          $match: {
+            $and: [{ role: { $ne: 'admin' } }],
+          },
+        },
+      ])
+      .exec();
     return docs;
   }
 
-  async findFilter(queryObj:any) {
-    let queryStr = JSON.stringify(queryObj) ;
-    queryStr = queryStr.replace(/\b(gte|gt|lte|lt|eq)\b/g , match => `$${match}`) 
-    const users = await this.userModel.find(queryObj) ;
-    return users ; 
+  async findAllEmployee(): Promise<UserDocument[]> {
+    const docs = await this.userModel
+      .aggregate([
+        {
+          $match: {
+            $and: [{ role: { $ne: 'admin' } }, { role: { $ne: 'manager' } }],
+          },
+        },
+      ])
+      .exec();
+    return docs;
+  }
+
+  async findFilter(queryObj: any) {
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(
+      /\b(gte|gt|lte|lt|eq)\b/g,
+      (match) => `$${match}`,
+    );
+    const users = await this.userModel.find(queryObj);
+    return users;
   }
 
   async findById(id: any): Promise<UserDocument> {
     return this.userModel.findById(id);
   }
   async findByEmail(email: string): Promise<UserDocument> {
-    return this.userModel.findOne({ email }).exec();
+    //return this.userModel.findOne({ email }).exec();
+    const data = await this.userModel
+      .aggregate([{ $match: { email: email } }, { $project: { email: 1 } }])
+      .exec();
+    return data[0];
   }
   async findByUsername(username: string): Promise<UserDocument> {
-    return this.userModel.findOne({ username }).exec();
+    return this.userModel.findOne({ username: username }).exec();
   }
 
-  async updateRefreshtoken(
-    id: string,
-    updateUserDto
-  ): Promise<UserDocument> {
+  async updateRefreshtoken(id: string, updateUserDto): Promise<UserDocument> {
     return this.userModel
       .findByIdAndUpdate(id, updateUserDto.refreshToken, { new: true })
       .exec();
   }
 
-  async updateF(
-    id : string , 
-    opts : Object 
-  ) : Promise<UserDocument> {
-    return this.userModel.findByIdAndUpdate(id , opts , {new : true}).exec();
+  async updateF(id: string, opts: Object): Promise<UserDocument> {
+    return this.userModel.findByIdAndUpdate(id, opts, { new: true }).exec();
   }
 
   async update(
     id: string,
-    updateUserDto : UpdateUserDto,
+    updateUserDto: UpdateUserDto,
   ): Promise<UserDocument> {
     return this.userModel
       .findByIdAndUpdate(id, updateUserDto, { new: true })
@@ -74,5 +86,4 @@ export class UsersService {
   async remove(id: string): Promise<UserDocument> {
     return this.userModel.findByIdAndDelete(id).exec();
   }
-
 }

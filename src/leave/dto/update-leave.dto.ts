@@ -1,3 +1,3 @@
 import { CreateLeaveDto } from './create-leave.dto';
 
-export class UpdateLeaveDto extends (CreateLeaveDto) {}
+export class UpdateLeaveDto extends CreateLeaveDto {}

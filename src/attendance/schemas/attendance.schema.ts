@@ -5,27 +5,26 @@ export type AttendanceDocument = Attendance & Document;
 
 @Schema()
 export class Attendance {
-  @Prop({required:true})
-  employeeID : mongoose.Schema.Types.ObjectId;
+  @Prop({ required: true })
+  employeeID: mongoose.Schema.Types.ObjectId;
 
-  @Prop({require : true })
-  startTime : Date ; 
-  
-  @Prop({require : false})
-  duration : number ;
+  @Prop({ require: true })
+  startTime: Date;
 
-  @Prop({required:true})
-  year : Number ; 
+  @Prop({ require: false })
+  duration: number;
 
-  @Prop({required:true})
-  month : Number ; 
+  @Prop({ required: true })
+  year: number;
 
-  @Prop({required:true})
-  date : Number ; 
+  @Prop({ required: true })
+  month: number;
 
-  @Prop({required:true})
-  isActive : Boolean;
+  @Prop({ required: true })
+  date: number;
 
+  @Prop({ required: true })
+  isActive: boolean;
 }
 
 export const AttendanceSchema = SchemaFactory.createForClass(Attendance);

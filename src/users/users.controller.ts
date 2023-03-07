@@ -13,7 +13,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guards';
 
-
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

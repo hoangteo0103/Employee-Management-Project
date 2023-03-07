@@ -12,14 +12,13 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
-import { CreateEmployeeDto } from './dto/create-employee.dto';
-import { UpdateEmployeeDto } from './dto/update-employee.dto';
-import RoleGuard from 'src/users/role/roles.guards';
-import Role from 'src/users/role/roles.enum';
-import { AttendanceService } from 'src/attendance/attendance.service';
-import { CreateLeaveDto } from 'src/leave/dto/create-leave.dto';
-import { LeaveService } from 'src/leave/leave.service';
+import RoleGuard from '../users/role/roles.guards';
+import Role from '../users/role/roles.enum';
+import { AttendanceService } from '../attendance/attendance.service';
+import { CreateLeaveDto } from '../leave/dto/create-leave.dto';
+import { LeaveService } from '../leave/leave.service';
 import * as moment from 'moment';
+import { AssetService } from 'src/asset/asset.service';
 
 @UseGuards(RoleGuard(Role.Employee))
 @Controller('employee')
@@ -28,6 +27,7 @@ export class EmployeeController {
     private readonly employeeService: EmployeeService,
     private attendanceService: AttendanceService,
     private leaveService: LeaveService,
+    private assetService: AssetService,
   ) {}
 
   @Get('')
@@ -212,5 +212,31 @@ export class EmployeeController {
       });
     }
     res.redirect('clocking');
+  }
+
+  // Asset
+  @Get('view-all-assets')
+  @Render('Employee/viewPersonalAssets')
+  async viewPersonalAssets(@Req() req) {
+    const assets = await this.assetService.findByOwnerID(req.user.id);
+    return {
+      title: 'View Personal Assets',
+      hasasset: assets.length > 0 ? 1 : 0,
+      userName: req.user.name,
+      moment: moment,
+      assets: assets,
+    };
+  }
+
+  @Get('view-asset/:id')
+  @Render('Employee/viewAsset')
+  async viewAsset(@Req() req) {
+    const asset = await this.assetService.findByID(req.params.id);
+    return {
+      title: 'View Asset ',
+      moment: moment,
+      userName: req.user.name,
+      asset: asset,
+    };
   }
 }

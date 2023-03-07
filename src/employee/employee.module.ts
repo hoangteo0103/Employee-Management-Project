@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { EmployeeController } from './employee.controller';
-import { AttendanceModule } from 'src/attendance/attendance.module';
-import { LeaveModule } from 'src/leave/leave.module';
+import { AttendanceModule } from '../attendance/attendance.module';
+import { LeaveModule } from '../leave/leave.module';
+import { AssetModule } from 'src/asset/asset.module';
 
 @Module({
-  imports: [AttendanceModule, LeaveModule],
+  imports: [AttendanceModule, LeaveModule, AssetModule],
   controllers: [EmployeeController],
   providers: [EmployeeService],
 })

@@ -56,6 +56,10 @@
                                 <input type="text" onkeypress="return onlyAlphabets(event,this);" class="form-control"
                                        value="<%= employee.name %>" required="required" id="name" name="name">
                             </div>
+                            <input type="hidden" class="form-control" value="<%= employee.username %>"
+                                       required="required" id="username" name="username">
+                            <input type="hidden" class="form-control" value="<%= employee.password %>"
+                            required="required" id="password" name="password">
                             <div class="form-group">
                                 <label for="email">Email Address:</label>
                                 <input type="email" class="form-control" value="<%= employee.email %>"
@@ -69,7 +73,7 @@
                                 <label for="DOB">Date of Birth:</label>
                                 <input type="date" class="form-control"
                                        value="<%= (employee.dateOfBirth); %>"
-                                       required="required" id="DOB" name="DOB">
+                                       required="required" id="DOB" name="dateOfBirth">
                             </div>
 
                             <div class="form-group">

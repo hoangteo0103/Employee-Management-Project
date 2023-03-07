@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ManagerService } from './manager.service';
 import { ManagerController } from './manager.controller';
-import { UsersModule } from 'src/users/users.module';
-import { AttendanceModule } from 'src/attendance/attendance.module';
-import { LeaveModule } from 'src/leave/leave.module';
-import { AuthModule } from 'src/auth/auth.module';
+import { UsersModule } from '../users/users.module';
+import { AttendanceModule } from '../attendance/attendance.module';
+import { LeaveModule } from '../leave/leave.module';
 import { JwtService } from '@nestjs/jwt';
 
 @Module({

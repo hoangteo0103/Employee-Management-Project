@@ -5,7 +5,7 @@ export type AttendanceDocument = Attendance & Document;
 
 @Schema()
 export class Attendance {
-  @Prop({ required: true })
+  @Prop({ required: true, ref: 'User' })
   employeeID: mongoose.Schema.Types.ObjectId;
 
   @Prop({ require: true })

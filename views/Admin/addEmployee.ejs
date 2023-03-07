@@ -83,9 +83,9 @@
                                 <% if (hasErrors){ %>
                                 <input type="date" class="form-control"
                                        value="<%= new Date(user.dateOfBirth).toISOString().substring(0, 10); %>"
-                                       required="required" id="DOB" name="DOB">
+                                       required="required" id="DOB" name="dateOfBirth">
                                 <% }else{ %>
-                                <input type="date" class="form-control" required="required" id="DOB" name="DOB">
+                                <input type="date" class="form-control" required="required" id="DOB" name="dateOfBirth">
                                 <% } %>
 
                             </div>
@@ -107,15 +107,15 @@
 
                             </div>
                             <div class="form-group">
-                                <label for="number">Contact Number:</label>
+                                <label for="contactNumber">Contact Number:</label>
                                 <% if (hasErrors){ %>
                                 <input type="text" 
                                        value="<%= user.contactNumber %>" class="form-control" required="required"
-                                       placeholder="e.g. XXXX-XXXXXXX" id="number" name="number">
+                                       placeholder="e.g. XXXX-XXXXXXX" id="contactNumber" name="contactNumber">
                                 <% }else{ %>
                                 <input type="text" 
                                        class="form-control" required="required" placeholder="e.g. XXXX-XXXXXXX"
-                                       id="number" name="number">
+                                       id="contactNumber" name="contactNumber">
                                 <% } %>
 
                             </div>

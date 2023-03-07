@@ -11,14 +11,12 @@ import {
   Res,
 } from '@nestjs/common';
 import { ManagerService } from './manager.service';
-import { CreateManagerDto } from './dto/create-manager.dto';
-import { UpdateManagerDto } from './dto/update-manager.dto';
-import Role from 'src/users/role/roles.enum';
+import Role from '../users/role/roles.enum';
 import { UseGuards } from '@nestjs/common';
-import RoleGuard from 'src/users/role/roles.guards';
-import { AttendanceService } from 'src/attendance/attendance.service';
-import { UsersService } from 'src/users/users.service';
-import { LeaveService } from 'src/leave/leave.service';
+import RoleGuard from '../users/role/roles.guards';
+import { AttendanceService } from '../attendance/attendance.service';
+import { UsersService } from '../users/users.service';
+import { LeaveService } from '../leave/leave.service';
 import * as moment from 'moment';
 
 @UseGuards(RoleGuard(Role.Manager))

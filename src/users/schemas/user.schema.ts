@@ -1,11 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import Role from '../role/roles.enum';
 
 export type UserDocument = User & Document;
 
 @Schema()
 export class User {
+  @Prop()
+  _id: mongoose.Schema.Types.ObjectId;
   @Prop({ required: true, unique: true })
   email: string;
 

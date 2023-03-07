@@ -49,15 +49,15 @@
                     <div id="menu1">
                         <h1>Profile</h1>
                         <br>
-                        <form class="form-group-sm" action="/employee/view-all-projects" method="get">
+                        <form class="form-group-sm" action="/employee/view-all-assets" method="get">
                             <h4>Name : <label id="name"><%= employee.name %></label></h4>
                             <h4>Email : <label id="type"><%= employee.email %></label></h4>
                             <h4>Date of Birth : <label
                                         id="dob"><%= moment(employee.dateOfBirth).format('MMMM Do YYYY') %></label></h4>
                             <h4>Department : <label id="department"><%= employee.department %></label></h4>
                             <h4>Designation : <label id="designation"><%= employee.designation %></label></h4>
-                            <h4>Projects : <label id="projects">
-                                    <button type="submit" class="form-control">View Projects</button>
+                            <h4>Assets : <label id="assets">
+                                    <button type="submit" class="form-control">View Assets</button>
                                 </label></h4>
 
                             <% if(employee.Skills.length > 0){ %>

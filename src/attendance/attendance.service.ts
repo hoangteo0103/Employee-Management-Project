@@ -56,13 +56,16 @@ export class AttendanceService {
     return data;
   }
 
-  async findFilter(queryObj: any) {
+  async findFilter(queryObj: any): Promise<AttendanceDocument[]> {
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(
       /\b(gte|gt|lte|lt|eq)\b/g,
       (match) => `$${match}`,
     );
-    const users = await this.attendanceModel.find(queryObj);
+    const users = await this.attendanceModel
+      .find(queryObj)
+      .populate('employeeID')
+      .exec();
     return users;
   }
 
@@ -121,17 +124,9 @@ export class AttendanceService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} attendance`;
-  }
-
   async update(id: mongoose.Schema.Types.ObjectId, updateAttendanceDto: any) {
     await this.attendanceModel
       .findByIdAndUpdate(id, updateAttendanceDto)
       .exec();
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} attendance`;
   }
 }

@@ -11,12 +11,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { AccessTokenGuard } from 'src/common/guards/accessToken.guards';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { AccessTokenGuard } from '../common/guards/accessToken.guards';
+import { CreateUserDto } from '../users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
-import { RefreshTokenGuard } from 'src/common/guards/refreshToken.guards';
-import { UsersService } from 'src/users/users.service';
+import { RefreshTokenGuard } from '../common/guards/refreshToken.guards';
+import { UsersService } from '../users/users.service';
 
 @Controller('auth')
 export class AuthController {

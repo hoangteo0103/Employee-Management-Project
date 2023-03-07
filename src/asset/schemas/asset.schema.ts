@@ -5,8 +5,8 @@ export type AssetDocument = Asset & Document;
 
 @Schema()
 export class Asset {
-  @Prop({ required: true })
-  ownerID: mongoose.Schema.Types.ObjectId;
+  @Prop({ ref: 'User' })
+  owner: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: false })
   type: string;

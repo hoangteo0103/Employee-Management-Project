@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
-import { AttendanceService } from 'src/attendance/attendance.service';
-import { LeaveService } from 'src/leave/leave.service';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import Role from 'src/users/role/roles.enum';
-import { UsersService } from 'src/users/users.service';
+import { AttendanceService } from '../attendance/attendance.service';
+import { LeaveService } from '../leave/leave.service';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import Role from '../users/role/roles.enum';
+import { UsersService } from '../users/users.service';
 import { CreateManagerDto } from './dto/create-manager.dto';
 import { UpdateManagerDto } from './dto/update-manager.dto';
 

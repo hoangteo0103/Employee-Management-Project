@@ -10,12 +10,21 @@ import {
   Req,
   Render,
   UseGuards,
+  ConsoleLogger,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
+import { CreateUserDto } from '../users/dto/create-user.dto';
 import Role from '../users/role/roles.enum';
 import RoleGuard from '../users/role/roles.guards';
 import { AdminService } from './admin.service';
+import {
+  GenerateArrayFilter,
+  ArrayFilter,
+} from '@kartikyathakur/nestjs-query-filter';
 import { UsersService } from '../users/users.service';
 import { AttendanceService } from '../attendance/attendance.service';
+import { UpdateUserDto } from '../users/dto/update-user.dto';
 import { LeaveService } from '../leave/leave.service';
 import * as moment from 'moment';
 import { AssetService } from '../asset/asset.service';
@@ -32,36 +41,17 @@ export class AdminController {
     private leaveService: LeaveService,
     private assetService: AssetService,
   ) {}
-
-  @Get('')
-  @Render('Admin/adminHome')
-  displayHome(@Req() req) {
-    return { title: 'Admin', userName: req.user.name };
-  }
-
-  @Get('view-profile')
-  @Render('Admin/viewProfile')
-  viewProfileAdmin(@Req() req) {
-    return {
-      title: 'Profile',
-      employee: req.user,
-      userName: req.user.name,
-      moment: moment,
-    };
-  }
   // Asset
   @Get('all-employee-assets/:id')
   @Render('Admin/employeeAllAssets')
   async viewEmployeeeAssets(@Req() req) {
     const employeeID = req.params.id;
     const assets = await this.assetService.findByOwnerID(employeeID);
-
-    const user = await this.userService.findById(employeeID);
     return {
       title: 'List Of Employee Assets',
       hasAsset: assets.length > 0 ? 1 : 0,
       assets: assets,
-      user: user,
+      user: assets[0].owner,
       userName: req.user.name,
     };
   }

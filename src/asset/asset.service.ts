@@ -19,15 +19,17 @@ export class AssetService {
   }
 
   async findByID(id: string): Promise<AssetDocument> {
-    const assets = await this.assetModel.findOne({
-      id: id,
-    });
+    const assets = await this.assetModel
+      .findOne({
+        id: id,
+      })
+      .populate('owner');
     return assets;
   }
 
-  async findByOwnerID(ownerID: string): Promise<AssetDocument[]> {
+  async findByOwnerID(owner: string): Promise<AssetDocument[]> {
     const assets = await this.assetModel.find({
-      ownerID: ownerID,
+      owner: owner,
     });
     return assets;
   }

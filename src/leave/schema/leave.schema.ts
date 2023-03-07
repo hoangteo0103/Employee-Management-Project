@@ -5,7 +5,7 @@ export type LeaveDocument = Leave & Document;
 
 @Schema()
 export class Leave {
-  @Prop({ required: true })
+  @Prop({ required: true, ref: 'User' })
   applicantID: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: true })

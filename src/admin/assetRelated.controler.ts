@@ -3,23 +3,14 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
   Res,
   Req,
   Render,
   UseGuards,
-  ConsoleLogger,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import Role from '../users/role/roles.enum';
 import RoleGuard from '../users/role/roles.guards';
-import { AdminService } from './admin.service';
 import { UsersService } from '../users/users.service';
-import { AttendanceService } from '../attendance/attendance.service';
-import { LeaveService } from '../leave/leave.service';
 import * as moment from 'moment';
 import { AssetService } from '../asset/asset.service';
 import { CreateAssetDto } from '../asset/dto/create-asset.dto';
@@ -32,10 +23,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 @Controller('admin')
 export class assetRelatedController {
   constructor(
-    private readonly adminService: AdminService,
-    private attendanceService: AttendanceService,
     private userService: UsersService,
-    private leaveService: LeaveService,
     private assetService: AssetService,
   ) {}
   // Asset

@@ -19,7 +19,14 @@ async function bootstrap() {
     .setTitle('API DOCUMENT')
     .setDescription('The API description')
     .setVersion('1.0')
-    .addTag('cats')
+    .addTag('admin-asset-related')
+    .addTag('admin-employee-related')
+    .addTag('admin-attendance-related')
+    .addTag('admin-leave-related')
+    .addTag('admin')
+    .addTag('employee')
+    .addTag('manager')
+    .addTag('auth')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

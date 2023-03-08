@@ -14,26 +14,23 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { CreateUserDto } from '../users/dto/create-user.dto';
 import Role from '../users/role/roles.enum';
 import RoleGuard from '../users/role/roles.guards';
 import { AdminService } from './admin.service';
-import {
-  GenerateArrayFilter,
-  ArrayFilter,
-} from '@kartikyathakur/nestjs-query-filter';
 import { UsersService } from '../users/users.service';
 import { AttendanceService } from '../attendance/attendance.service';
-import { UpdateUserDto } from '../users/dto/update-user.dto';
 import { LeaveService } from '../leave/leave.service';
 import * as moment from 'moment';
 import { AssetService } from '../asset/asset.service';
 import { CreateAssetDto } from '../asset/dto/create-asset.dto';
 import { UpdateAssetDto } from '../asset/dto/update-asset.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(RoleGuard(Role.Admin))
+@ApiBearerAuth('jwt')
+@ApiTags('admin-asset-related')
 @Controller('admin')
-export class AdminController {
+export class assetRelatedController {
   constructor(
     private readonly adminService: AdminService,
     private attendanceService: AttendanceService,
@@ -61,7 +58,6 @@ export class AdminController {
   async addAssetView(@Req() req) {
     const employeeID = req.params.id;
     const user = await this.userService.findById(employeeID);
-    console.log();
     return {
       title: 'Add employee asset',
       employee: user,

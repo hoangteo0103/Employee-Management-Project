@@ -9,6 +9,7 @@ import { AssetModule } from '../asset/asset.module';
 import { employeeRelatedController } from './employeeRelated.controler';
 import { leaveRelatedController } from './leaveRelated.controler';
 import { attendanceRelatedController } from './attendanceRelated.controler';
+import { assetRelatedController } from './assetRelated.controler';
 
 @Module({
   controllers: [
@@ -16,6 +17,7 @@ import { attendanceRelatedController } from './attendanceRelated.controler';
     employeeRelatedController,
     leaveRelatedController,
     attendanceRelatedController,
+    assetRelatedController,
   ],
   imports: [UsersModule, AttendanceModule, LeaveModule, AssetModule],
   providers: [AdminService, JwtService],

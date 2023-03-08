@@ -16,8 +16,11 @@ import { AttendanceService } from '../attendance/attendance.service';
 import { LeaveService } from '../leave/leave.service';
 import * as moment from 'moment';
 import { AssetService } from '../asset/asset.service';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(RoleGuard(Role.Admin))
+@ApiBearerAuth('jwt')
+@ApiTags('admin-attendance-related')
 @Controller('admin')
 export class attendanceRelatedController {
   constructor(

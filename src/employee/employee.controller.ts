@@ -19,8 +19,11 @@ import { CreateLeaveDto } from '../leave/dto/create-leave.dto';
 import { LeaveService } from '../leave/leave.service';
 import * as moment from 'moment';
 import { AssetService } from 'src/asset/asset.service';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(RoleGuard(Role.Employee))
+@ApiTags('employee')
+@ApiBearerAuth('jwt')
 @Controller('employee')
 export class EmployeeController {
   constructor(
@@ -138,7 +141,7 @@ export class EmployeeController {
   @Get('clocking')
   @Render('Employee/clocking')
   async renderClock(@Req() req) {
-    const employeeID = req.user._id;
+    const employeeID = req.user.id;
     const attendance = await this.attendanceService.findAttendanceEmployeeToday(
       employeeID,
     );
@@ -152,20 +155,22 @@ export class EmployeeController {
     }
 
     let newDuration = attendance.duration;
+    let newStartTime = attendance.startTime;
     if (attendance.isActive) {
-      const newStartTime = new Date();
+      newStartTime = new Date();
       newDuration =
         attendance.duration +
-        newStartTime.getSeconds() -
-        attendance.startTime.getSeconds();
-      await this.attendanceService.update(attendance.id, {
+        Math.floor(newStartTime.getTime() / 1000) -
+        Math.floor(attendance.startTime.getTime() / 1000);
+      await this.attendanceService.update(attendance._id, {
         duration: newDuration,
+        startTime: newStartTime,
       });
     }
     return {
       title: 'Clocking',
       isActive: attendance.isActive,
-      startTime: attendance.startTime,
+      startTime: newStartTime,
       duration: newDuration,
       userName: req.user.name,
     };
@@ -174,14 +179,14 @@ export class EmployeeController {
   @Post('mark-attendance-clocking')
   @Render('Employee/clocking')
   async markAttendanceClocking(@Req() req, @Res() res) {
-    const employeeID = req.user._id;
+    const employeeID = req.user.id;
     const attendance = await this.attendanceService.findAttendanceEmployeeToday(
       employeeID,
     );
     if (!attendance) {
       const date = new Date();
       await this.attendanceService.create({
-        employeeID: req.user._id,
+        employeeID: req.user.id,
         year: new Date().getFullYear(),
         month: new Date().getMonth() + 1,
         date: new Date().getDate(),
@@ -190,27 +195,9 @@ export class EmployeeController {
         duration: 0,
       });
       res.redirect('clocking');
+      return;
     }
-    let isActive = true;
-    if (attendance.isActive) isActive = false;
-    let newDuration = attendance.duration;
-    if (attendance.isActive) {
-      const newStartTime = new Date();
-      newDuration =
-        attendance.duration +
-        newStartTime.getSeconds() -
-        attendance.startTime.getSeconds();
-      await this.attendanceService.update(attendance.id, {
-        duration: newDuration,
-        isActive: false,
-      });
-    } else {
-      const newStartTime = new Date();
-      await this.attendanceService.update(attendance._id, {
-        startTime: newStartTime,
-        isActive: true,
-      });
-    }
+    this.attendanceService.toggleActive(attendance);
     res.redirect('clocking');
   }
 

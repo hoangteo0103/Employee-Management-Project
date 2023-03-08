@@ -24,8 +24,10 @@ import { UpdateUserDto } from '../users/dto/update-user.dto';
 import { LeaveService } from '../leave/leave.service';
 import * as moment from 'moment';
 import { AssetService } from '../asset/asset.service';
+import { ApiTags } from '@nestjs/swagger';
 
 @UseGuards(RoleGuard(Role.Admin))
+@ApiTags('admin-employee-related')
 @Controller('admin')
 export class employeeRelatedController {
   constructor(

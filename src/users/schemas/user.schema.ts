@@ -6,24 +6,38 @@ export type UserDocument = User & Document;
 
 @Schema()
 export class User {
-  @Prop()
-  _id: mongoose.Schema.Types.ObjectId;
   @Prop({ required: true, unique: true })
   email: string;
 
-  @Prop({ required: true, unique: true })
+  @Prop({ required: false, unique: true })
   username: string;
 
-  @Prop({ required: true })
+  @Prop({
+    required: function () {
+      return this.username ? true : false;
+    },
+  })
   password: string;
 
-  @Prop({ required: false })
+  @Prop({
+    required: function () {
+      return this.username ? true : false;
+    },
+  })
   name: string;
 
-  @Prop({ required: false })
+  @Prop({
+    required: function () {
+      return this.username ? true : false;
+    },
+  })
   dateOfBirth: Date;
 
-  @Prop({ required: false })
+  @Prop({
+    required: function () {
+      return this.username ? true : false;
+    },
+  })
   contactNumber: string;
 
   @Prop()
@@ -32,13 +46,25 @@ export class User {
   @Prop({ require: true, default: Role.Employee })
   role: Role;
 
-  @Prop({ require: false })
+  @Prop({
+    required: function () {
+      return this.username ? true : false;
+    },
+  })
   department: string;
 
-  @Prop({ require: false })
+  @Prop({
+    required: function () {
+      return this.username ? true : false;
+    },
+  })
   Skills: [string];
 
-  @Prop({ require: false })
+  @Prop({
+    required: function () {
+      return this.username ? true : false;
+    },
+  })
   designation: string;
 }
 

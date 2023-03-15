@@ -17,7 +17,7 @@ import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { RefreshTokenGuard } from '../common/guards/refreshToken.guards';
 import { UsersService } from '../users/users.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -53,6 +53,7 @@ export class AuthController {
     const user = await this.userService.findByUsername(data.username);
     res.redirect(`/${user.role}`);
   }
+  @ApiCookieAuth()
   @UseGuards(AccessTokenGuard)
   @Get('logout')
   logout(@Req() req: Request, @Res() res) {

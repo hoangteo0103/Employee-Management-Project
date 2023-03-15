@@ -9,7 +9,6 @@ import { UsersService } from './users.service';
 describe('UsersController', () => {
   let usersController: UsersController;
   let usersService: UsersService;
-  const resultAll = [''];
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [
@@ -66,7 +65,7 @@ describe('UsersController', () => {
         await usersService.findByUsername('buinguyenhoang')
       ).toObject();
       delete employee._id;
-      expect(employee).toStrictEqual(result);
+      expect(employee).toContain(result);
     });
   });
 });

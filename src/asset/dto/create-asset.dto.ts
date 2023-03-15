@@ -11,7 +11,6 @@ export class CreateAssetDto {
   @ApiProperty()
   name: string;
 
-  @IsNumber()
   @IsNotEmpty()
   @ApiProperty()
   quantity: number;

@@ -1,11 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsEmail,
-  IsString,
-  IsNotEmpty,
-  IsDefined,
-  IsOptional,
-} from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateLeaveDto {
   @IsNotEmpty()
@@ -35,13 +29,13 @@ export class CreateLeaveDto {
   @IsNotEmpty()
   appliedDate: Date;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'Sick' })
   @IsNotEmpty()
   @IsString()
   reason: string;
 
   @IsString()
   @IsOptional()
-  @ApiProperty()
+  @ApiProperty({ example: 'You can take a day off' })
   adminResponse: string;
 }

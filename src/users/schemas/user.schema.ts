@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
+import { Asset } from 'src/asset/entities/asset.entity';
 import Role from '../role/roles.enum';
 
 export type UserDocument = User & Document;
@@ -66,6 +67,12 @@ export class User {
     },
   })
   designation?: string;
+
+  @Prop({
+    required: false,
+    ref: 'Asset',
+  })
+  assets: [mongoose.Schema.Types.ObjectId];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

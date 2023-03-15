@@ -10,9 +10,6 @@ import {
   Req,
   Render,
   UseGuards,
-  ConsoleLogger,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import Role from '../users/role/roles.enum';
 import RoleGuard from '../users/role/roles.guards';
@@ -22,9 +19,10 @@ import { AttendanceService } from '../attendance/attendance.service';
 import { LeaveService } from '../leave/leave.service';
 import * as moment from 'moment';
 import { AssetService } from '../asset/asset.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(RoleGuard(Role.Admin))
+@ApiCookieAuth()
 @ApiTags('admin-leave-related')
 @Controller('admin')
 export class leaveRelatedController {

@@ -1,3 +1,3 @@
 import { CreateLeaveDto } from './create-leave.dto';
-
-export class UpdateLeaveDto extends CreateLeaveDto {}
+import { PartialType } from '@nestjs/swagger';
+export class UpdateLeaveDto extends PartialType(CreateLeaveDto) {}

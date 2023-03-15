@@ -15,10 +15,10 @@ import * as moment from 'moment';
 import { AssetService } from '../asset/asset.service';
 import { CreateAssetDto } from '../asset/dto/create-asset.dto';
 import { UpdateAssetDto } from '../asset/dto/update-asset.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(RoleGuard(Role.Admin))
-@ApiBearerAuth('jwt')
+@ApiCookieAuth()
 @ApiTags('admin-asset-related')
 @Controller('admin')
 export class assetRelatedController {
@@ -31,12 +31,12 @@ export class assetRelatedController {
   @Render('Admin/employeeAllAssets')
   async viewEmployeeeAssets(@Req() req) {
     const employeeID = req.params.id;
-    const assets = await this.assetService.findByOwnerID(employeeID);
+    const user = await this.userService.findWithAsset(employeeID);
     return {
       title: 'List Of Employee Assets',
-      hasAsset: assets.length > 0 ? 1 : 0,
-      assets: assets,
-      user: assets[0].owner,
+      hasAsset: user.assets.length > 0 ? 1 : 0,
+      assets: user.assets,
+      user: user,
       userName: req.user.name,
     };
   }

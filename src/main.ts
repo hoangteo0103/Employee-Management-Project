@@ -16,7 +16,7 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.setViewEngine('ejs');
   const config = new DocumentBuilder()
-    .setTitle('API DOCUMENT')
+    .addCookieAuth('jwt')
     .setDescription('The API description')
     .setVersion('1.0')
     .addTag('admin-asset-related')

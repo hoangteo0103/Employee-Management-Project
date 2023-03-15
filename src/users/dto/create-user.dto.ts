@@ -15,23 +15,23 @@ export class CreateUserDto {
 
   @IsEmail()
   @IsNotEmpty()
-  @ApiProperty()
+  @ApiProperty({ example: 'test@gmail.com' })
   email: string;
 
   @ValidateIf((o) => o.username != null)
   @IsNotEmpty()
   @IsString()
-  @ApiProperty()
+  @ApiProperty({ example: 'password' })
   password: string;
 
   @IsNotEmpty()
-  @ApiProperty()
+  @ApiProperty({ example: 'Hoang' })
   name: string;
 
   @ValidateIf((o) => o.username != null)
   @IsNotEmpty()
   @IsString()
-  @ApiProperty()
+  @ApiProperty({ example: '0333333333' })
   contactNumber: string;
 
   @ValidateIf((o) => o.username != null)
@@ -55,5 +55,9 @@ export class CreateUserDto {
   @ApiProperty()
   @IsString()
   department: string;
+
+  @ValidateIf((o) => o.username != null)
+  @ApiProperty({ enum: ['Admin', 'Manager', 'Employee'] })
+  @IsString()
   role: Role;
 }

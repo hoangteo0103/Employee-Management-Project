@@ -19,11 +19,11 @@ import { CreateLeaveDto } from '../leave/dto/create-leave.dto';
 import { LeaveService } from '../leave/leave.service';
 import * as moment from 'moment';
 import { AssetService } from 'src/asset/asset.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(RoleGuard(Role.Employee))
 @ApiTags('employee')
-@ApiBearerAuth('jwt')
+@ApiCookieAuth()
 @Controller('employee')
 export class EmployeeController {
   constructor(

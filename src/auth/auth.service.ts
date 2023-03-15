@@ -35,15 +35,16 @@ export class AuthService {
       .replace(/Đ/g, 'D');
   }
 
-  async resetPassword(email: string) {
+  async resetPassword(email: string, newPassword?: string) {
     const user = await this.usersService.findByEmail(email);
     if (!user) {
       throw new BadRequestException('User not exists');
     }
 
-    const password = this.generatePassword();
+    let password = this.generatePassword();
+    if (newPassword) password = newPassword;
     const hash = await this.hashData(password);
-    this.usersService.updateF(user.id, { password: hash });
+    this.usersService.updateOptions(user.id, { password: hash });
     await this.mailService.sendResetPassword(
       email,
       user.name,

@@ -1,11 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
+import { User } from 'src/users/schemas/user.schema';
 
 export type AssetDocument = Asset & Document;
 
 @Schema()
 export class Asset {
-  @Prop({ ref: 'User' })
+  @Prop({ ref: User.name })
   owner: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: false })

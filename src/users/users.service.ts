@@ -27,6 +27,11 @@ export class UsersService {
     return docs;
   }
 
+  async findWithAsset(id: string): Promise<UserDocument> {
+    const docs = await this.userModel.findById(id).populate('assets').exec();
+    return docs;
+  }
+
   async findAllEmployee(): Promise<UserDocument[]> {
     const docs = await this.userModel
       .aggregate([
@@ -70,7 +75,7 @@ export class UsersService {
       .exec();
   }
 
-  async updateF(id: string, opts: Object): Promise<UserDocument> {
+  async updateOptions(id: string, opts: Object): Promise<UserDocument> {
     return this.userModel.findByIdAndUpdate(id, opts, { new: true }).exec();
   }
 

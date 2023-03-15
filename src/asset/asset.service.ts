@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
+import { UsersService } from 'src/users/users.service';
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { UpdateAssetDto } from './dto/update-asset.dto';
 import { Asset } from './entities/asset.entity';
@@ -11,10 +12,14 @@ export class AssetService {
   constructor(
     @InjectModel(Asset.name)
     private assetModel: Model<AssetDocument>,
+    private usersService: UsersService,
   ) {}
 
   async create(createAssetDto: CreateAssetDto) {
     const createdAsset = await new this.assetModel(createAssetDto);
+    const user = await this.usersService.findById(createAssetDto.owner);
+    user.assets.push(createdAsset._id);
+    await user.save();
     return createdAsset.save();
   }
 

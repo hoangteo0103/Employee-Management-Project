@@ -18,9 +18,10 @@ import { AttendanceService } from '../attendance/attendance.service';
 import { UsersService } from '../users/users.service';
 import { LeaveService } from '../leave/leave.service';
 import * as moment from 'moment';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(RoleGuard(Role.Manager))
+@ApiCookieAuth()
 @ApiTags('manager')
 @Controller('manager')
 export class ManagerController {
